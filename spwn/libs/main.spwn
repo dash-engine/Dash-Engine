@@ -1,0 +1,22 @@
+new_counter = import "new_counter.spwn"
+
+time = new_counter(30, true)
+item = new_counter(20, false)
+
+time2 = item + time
+time3 = item + 1.2
+not_time = item + 7
+not_time2 = item / 2
+
+floored_time3 = time3.floor()
+rounded_time3 = time3.round()
+ceiled_time3 = time3.ceil()
+
+positive_time3 = time3.abs()
+negative_time3 = time3.neg()
+
+time2.display(90,90)
+time3.display(120,90)
+floored_time3.display(150, 90)
+not_time.display(180,90)
+not_time2.display(210,90)

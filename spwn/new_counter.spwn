@@ -1,0 +1,296 @@
+extract obj_props
+
+type @new_counter
+
+item_edit = (
+ target_counter: @new_counter = null,
+ first_counter: @new_counter = null,
+ second_counter: @new_counter = null,
+ assign_op: in [0, 1, 2, 3, 4] = 0,
+ first_op: in [1, 2, 3, 4] = 1, 
+ second_op: in [3, 4] = 3,
+ mod: @number = 1.0,
+ first_round_func: in [0, 1, 2, 3] = 0,
+ first_sign_func: in [0, 1, 2] = 0,
+ ){
+ return trigger {
+  1: 3619, // Item edit trigger id
+  80: first_counter.item if first_counter != null else 0, // item id 1
+  95: second_counter.item if second_counter != null else 0, // item id 2
+  51: target_counter.item if target_counter != null else 0, // target item id
+  476: first_counter.get_type() if first_counter != null else 0, // item type 1
+  477: second_counter.get_type() if second_counter != null else 0, // item type 2
+  478: target_counter.get_type() if target_counter != null else 0, // target item type
+  479: mod, // mod
+  480: assign_op, // assign op [0, 4] = + - * /
+  481: first_op, // op 1 [1, 4] + - * /
+  482: second_op, // op 2 [3, 4] * /
+  578: first_sign_func, // none/abs/neg 1
+  579: 0, // none/abs/neg 2
+  485: first_round_func, // none/round/floor/ceil 1
+  486: 0, // none/round/floor/ceil 2
+ }
+}
+
+is_integer = (num: @number){return (num % 1) == 0}
+
+impl @trigger {
+ with: (self, key: @object_key | @number, value) -> @trigger {
+  return match key {
+   @object_key: (){
+  		let new_obj = self
+  		$.edit_obj(new_obj, key, value)
+  		return new_obj
+   }(),
+   @number: (){
+  		let new_obj = self
+  		$.edit_obj(new_obj, key, value)
+  		return new_obj
+   }()
+  }
+	},
+}
+
+impl @new_counter {
+ new: (source: @number | @item = 0, is_time: @bool = false) -> @new_counter {
+   return match source {
+    @number: (){
+     id = ?i
+     let out = @new_counter::{
+      item: id,
+      is_time: is_time,
+     }
+     if source != 0 {
+      out = source
+     }
+     return out
+    }(),
+    @item: (){
+     return @new_counter::{
+      item: source,
+      is_time: is_time,
+     }
+    }()
+   }
+ }
+}
+
+impl @new_counter {
+ display: (self, x: @number = 90, y: @number = 90)-> @NULL{
+  $.add(obj {
+   OBJ_ID: 1615,
+   X: x,
+   Y: y,
+   ITEM: self.item,
+   466: self.is_time,
+  });
+ },
+ 
+ get_type: (self) -> @number {
+  return (self.is_time as @number) + 1
+ },
+ 
+ _assign_: (self, other: @number | @new_counter) -> @NULL {
+  match other {
+   @number: (){
+    $.add(
+     item_edit(target_counter = self, mod = other)
+    )
+   }(),
+   @new_counter: (){
+    $.add(
+     item_edit(target_counter = self, first_counter = other)
+    )
+   }(),
+  }
+ },
+ 
+ _add_: (self, other: @number | @new_counter) -> @NULL{
+  match other {
+   @number: (){
+    $.add(
+     item_edit(target_counter = self, mod = other, assign_op = 1)
+    )
+   }(),
+   @new_counter: (){
+    $.add(
+     item_edit(target_counter = self, first_counter = other, assign_op = 1)
+    )
+   }(),
+  }
+ },
+ 
+ _subtract_: (self, other: @number | @new_counter) -> @NULL{
+  match other {
+   @number: (){
+    $.add(
+     item_edit(target_counter = self, mod = other, assign_op = 2)
+    )
+   }(),
+   @new_counter: (){
+    $.add(
+     item_edit(target_counter = self, first_counter = other, assign_op = 2)
+    )
+   }(),
+  }
+ },
+ 
+ _multiply_: (self, other: @number | @new_counter) -> @NULL{
+  match other {
+   @number: (){
+    $.add(
+     item_edit(target_counter = self, mod = other, assign_op = 3)
+    )
+   }(),
+   @new_counter: (){
+    $.add(
+     item_edit(target_counter = self, first_counter = other, assign_op = 3)
+    )
+   }(),
+  }
+ },
+ 
+ _divide_: (self, other: @number | @new_counter) -> @NULL{
+  match other {
+   @number: (){
+    $.add(
+     item_edit(target_counter = self, mod = other, assign_op = 4)
+    )
+   }(),
+   @new_counter: (){
+    $.add(
+     item_edit(target_counter = self, first_counter = other, assign_op = 4)
+    )
+   }(),
+  }
+ },
+ 
+ _plus_: (self, other: @number | @new_counter) -> @new_counter{
+  return match other {
+   @number: (){
+    result = @new_counter::new(is_time = self.is_time || !is_integer(other))
+    additional_counter = @new_counter::new(other, true) // item edit trigger cannot do i5 = i2 + 666 for some reason
+    $.add(
+     item_edit(target_counter = result, first_counter = self, second_counter = additional_counter)
+    )
+    return result
+   }(),
+   @new_counter: (){
+    result = @new_counter::new(is_time = self.is_time || other.is_time)
+    $.add(
+     item_edit(target_counter = result, first_counter = self, second_counter = other)
+    )
+    return result
+   }(),
+  }
+ },
+ 
+ _minus_: (self, other: @number | @new_counter) -> @new_counter{
+  return match other {
+   @number: (){
+    result = @new_counter::new(is_time = self.is_time || !is_integer(other))
+    additional_counter = @new_counter::new(other, true) // item edit trigger cannot do i5 = i2 - 666 for some reason
+    $.add(
+     item_edit(target_counter = result, first_counter = self, second_counter = additional_counter, first_op = 2)
+    )
+    return result
+   }(),
+   @new_counter: (){
+    result = @new_counter::new(is_time = self.is_time || other.is_time)
+    $.add(
+     item_edit(target_counter = result, first_counter = self, second_counter = other, first_op = 2)
+    )
+    return result
+   }(),
+  }
+ },
+ 
+ _times_: (self, other: @number | @new_counter) -> @new_counter{
+  return match other {
+   @number: (){
+    result = @new_counter::new(is_time = self.is_time || !is_integer(other))
+    $.add(
+     item_edit(target_counter = result, first_counter = self, mod = other, second_op = 3)
+    )
+    return result
+   }(),
+   @new_counter: (){
+    result = @new_counter::new(is_time = self.is_time || other.is_time)
+    $.add(
+     item_edit(target_counter = result, first_counter = self, second_counter = other, first_op = 3)
+    )
+    return result
+   }(),
+  }
+ },
+ 
+ _divided_by_: (self, other: @number | @new_counter) -> @new_counter{
+  return match other {
+   @number: (){
+    result = @new_counter::new(is_time = self.is_time || !is_integer(other))
+    $.add(
+     item_edit(target_counter = result, first_counter = self, mod = other, second_op = 4)
+    )
+    return result
+   }(),
+   @new_counter: (){
+    result = @new_counter::new(is_time = self.is_time || other.is_time)
+    $.add(
+     item_edit(target_counter = result, first_counter = self, second_counter = other, first_op = 4)
+    )
+    return result
+   }(),
+  }
+ },
+
+ _increment_: (self) -> @NULL{
+  self += 1
+ },
+ 
+ _decrement_: (self) -> @NULL{
+  self -= 1
+ },
+ 
+ floor: (self) -> @new_counter {
+  result = @new_counter::new(0, self.is_time)
+  $.add(
+   item_edit(target_counter = result, first_counter = self, first_round_func = 2)
+  )
+  return result
+ },
+ 
+ round: (self) -> @new_counter {
+  result = @new_counter::new(0, self.is_time)
+  $.add(
+   item_edit(target_counter = result, first_counter = self, first_round_func = 1)
+  )
+  return result
+ },
+ 
+ ceil: (self) -> @new_counter {
+   result = @new_counter::new(0, self.is_time)
+   $.add(
+    item_edit(target_counter = result, first_counter = self, first_round_func = 3)
+   )
+   return result
+ },
+ 
+ abs: (self) -> @new_counter {
+  result = @new_counter::new(0, self.is_time)
+  $.add(
+   item_edit(target_counter = result, first_counter = self, first_sign_func = 1)
+  )
+  return result
+ },
+ 
+ neg: (self) -> @new_counter {
+  result = @new_counter::new(0, self.is_time)
+  $.add(
+   item_edit(target_counter = result, first_counter = self, first_sign_func = 2)
+  )
+  return result
+ },
+ 
+}
+
+return @new_counter::new

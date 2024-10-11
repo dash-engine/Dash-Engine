@@ -1,0 +1,125 @@
+[gd_scene load_steps=4 format=3 uid="uid://cctfi18ju7m2w"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_48syh"]
+[ext_resource type="Script" path="res://scripts/properties.gd" id="2_ro366"]
+
+[sub_resource type="Theme" id="Theme_u2afu"]
+default_font_size = 16
+
+[node name="main" type="Control" node_paths=PackedStringArray("canvas")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_48syh")
+canvas = NodePath("canvas")
+
+[node name="canvas" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 146.0
+offset_top = 32.0
+offset_right = 994.0
+offset_bottom = 524.0
+color = Color(0.374139, 0.374139, 0.374139, 1)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+custom_minimum_size = Vector2(117, 512)
+layout_mode = 0
+offset_top = 32.0
+offset_right = 117.0
+offset_bottom = 544.0
+vertical_scroll_mode = 0
+
+[node name="addObj" type="Button" parent="."]
+layout_mode = 0
+offset_top = 524.0
+offset_right = 32.0
+offset_bottom = 555.0
+text = "+"
+
+[node name="compile" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1080.0
+offset_right = 1152.0
+offset_bottom = 31.0
+text = "Compile"
+
+[node name="edit_global_script" type="Button" parent="."]
+layout_mode = 0
+offset_right = 72.0
+offset_bottom = 31.0
+text = "Edit global script"
+
+[node name="properties" type="Control" parent="." node_paths=PackedStringArray("nameTextBox", "uidTextBox", "editScriptButton", "objTypeBox")]
+anchors_preset = 0
+offset_top = 32.0
+offset_right = 40.0
+offset_bottom = 72.0
+script = ExtResource("2_ro366")
+nameTextBox = NodePath("name")
+uidTextBox = NodePath("UID")
+editScriptButton = NodePath("editScript")
+objTypeBox = NodePath("objType/objType")
+
+[node name="name" type="TextEdit" parent="properties"]
+layout_mode = 0
+offset_left = 994.0
+offset_top = 32.0
+offset_right = 1152.0
+offset_bottom = 67.0
+placeholder_text = "Name"
+
+[node name="UID" type="TextEdit" parent="properties"]
+layout_mode = 0
+offset_left = 994.0
+offset_top = 457.0
+offset_right = 1152.0
+offset_bottom = 492.0
+theme = SubResource("Theme_u2afu")
+text = "1234-1234-1234"
+placeholder_text = "UID"
+editable = false
+
+[node name="editScript" type="Button" parent="properties"]
+layout_mode = 0
+offset_left = 994.0
+offset_top = 229.0
+offset_right = 1152.0
+offset_bottom = 260.0
+text = "Edit script"
+
+[node name="delete" type="Button" parent="properties"]
+layout_mode = 0
+offset_left = 994.0
+offset_top = 273.0
+offset_right = 1152.0
+offset_bottom = 304.0
+text = "Delete object"
+
+[node name="objType" type="Control" parent="properties"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="text" type="Label" parent="properties/objType"]
+layout_mode = 0
+offset_left = 994.0
+offset_top = 96.0
+offset_right = 1152.0
+offset_bottom = 119.0
+text = "Object type"
+horizontal_alignment = 1
+
+[node name="objType" type="OptionButton" parent="properties/objType"]
+layout_mode = 0
+offset_left = 994.0
+offset_top = 120.0
+offset_right = 1152.0
+offset_bottom = 146.0
+
+[connection signal="pressed" from="addObj" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="compile" to="." method="_on_compile_pressed"]
+[connection signal="pressed" from="edit_global_script" to="." method="_on_edit_global_script_pressed"]
+[connection signal="pressed" from="properties/editScript" to="properties" method="_on_edit_script_pressed"]

@@ -1,0 +1,56 @@
+//Made by https://github.com/awsloth/spwn-rand
+
+let seed = $.time()
+a = 1664525
+c = 1013904223
+mod = 2 ^ 32
+
+set_seed = (new_seed: @number){
+    seed = new_seed
+}
+
+get_seed = (){
+    return seed
+}
+
+rand_int = (start: @number, end: @number){
+    seed = (a*seed + c) % mod
+    return seed % (end-start+1) + start
+}
+
+rand_to_1 = (){
+    return rand_int(0, 2^32-1)/(2^32-1)
+}
+
+rand_float = (start: @number, end: @number){
+    integer = rand_int(start/%1, end/%1)
+    let float = 0
+    if integer == end/%1{
+        float = rand_to_1()*(end%1)
+    } else {
+        float = rand_to_1()
+    }
+
+    return integer + float
+}
+
+rand_choice = (array: @array){
+    return array[rand_int(0, array.length-1)]
+}
+
+rand_shuffle = (array: @array){
+    let array = array
+    for i in array.length..1 {
+        array[rand_int(0, i)] <=> array[i]
+    }
+    return array
+}
+
+return {
+    set_seed: set_seed,
+    get_seed: get_seed,
+    randint: rand_int,
+    random: rand_float,
+    shuffle: rand_shuffle,
+    choice: rand_choice
+    }
