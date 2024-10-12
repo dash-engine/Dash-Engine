@@ -1,0 +1,46 @@
+extract obj_props;
+
+/*
+SETUP
+*/
+let EngineName = "Geometry Dash Game Engine";
+let currentScene = 0;
+let scenes = 0;
+
+/*
+FUNCTIONS
+*/
+
+create_text = (text, txt_x, txt_y) {
+    $.add(obj {
+        OBJ_ID: 211,
+        X: 0,
+        Y: 0
+    });
+
+    $.add(text.to_obj().with(X, txt_x).with(Y, txt_y).with(SCALING, 0.6));
+};
+
+countScene = () {
+    scenes += 1;
+};
+
+change_scene = (sceneID) {
+    // Hide all scenes
+    let groupModifying = 800g;
+    let i = 0;
+
+    while i <= scenes {
+        groupModifying.alpha(0);
+        groupModifying++;
+        i++;
+    }
+
+    let sceneGroup = 800g + sceneID;
+    sceneGroup.alpha(1);
+    currentScene = sceneID;
+};
+
+//Watermark (If you're editing the source code please do not remove this)
+create_text("Made with Geometry Dash Game Engine", 0, -1000);
+create_text("Github: github.com/MikeDeev/GDEngine", 0, -960);

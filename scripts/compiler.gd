@@ -2,8 +2,13 @@ extends Node
 
 var dir = "user://temp"
 
+var temp = 1
+
 func compile():
-	print("---Start compiling---")
+	temp+=1
+	Global.resetOutput()
+	await Global.wait(.5)
+	Global.addToOutput("---Start compiling---")
 	deleteTempDir()
 	var objectsPath = []
 	create_spwn("global",Global.project["scripts"]["global"])
@@ -33,21 +38,21 @@ $.add(obj {{
 /// Object script ///
 %s
 		""" % [Name, uid, pos.x, pos.y, rotation, script]
-		objectsPath.append(create_spwn("object_"+uid,code))
+		objectsPath.append(create_spwn("object_"+uid.replace("-","_"),code))
 	var code = """"""
 	for file in objectsPath:
 		code = """%s
-%s""" % [code, "let import " + file.replace(".spwn","")]
+%s""" % [code, 'let import "' + file + '"']
 	create_spwn("main",code)
-	print("--end compiling--")
 	compileCommand()
+	Global.addToOutput("--end compiling--")
 
 func _ready() -> void:
 	compile()
 
 func create_spwn(fname,code):
 	var fileName = fname+".spwn"
-	print("Creating file: ", fileName)
+	Global.addToOutput("Creating file" + str(fileName), true)
 	var file = FileAccess.open(dir+"/"+fileName,FileAccess.WRITE)
 	file.store_string(code)
 	file.close()
@@ -56,17 +61,16 @@ func create_spwn(fname,code):
 func compileCommand():
 	var filename = "main.spwn"
 	var project_name = "project"
-
-	var command = "spwn"
-	var arguments = ["build", filename, "--level-name", '"test"']
-
-	var output = []
-	var error_code = OS.execute(command, arguments,output,true)
 	
-	if error_code == OK:
-		for line in output:
-			print(line)
-	else:
+	var command = "spwn"
+	var arguments = ["build", OS.get_user_data_dir()+"/temp/"+filename, "--level-name", '"test"']
+	
+	var output = []
+	var error_code = OS.execute(command, arguments, output, true, true)
+	
+	Global.addToOutput(ansi_parser.parse(output[0]))
+	
+	if error_code != OK:
 		print("exit with error: ", error_code)
 
 func deleteTempDir():
