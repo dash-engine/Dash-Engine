@@ -1,4 +1,7 @@
 extends Panel
+#### Constants ####
+const GRID_SIZE = 8
+###################
 
 @export var canvas : Control
 @export var Sprite : Sprite2D
@@ -18,7 +21,7 @@ extends Panel
 var alrPressed = false
 var pressedDebounce = false
 
-const GRID_SIZE = 8
+@onready var oldType = type
 
 func _ready() -> void:
 	uid = UID.generate()
@@ -53,7 +56,9 @@ func _gui_input(event):
 				pass
 
 func _process(delta):
-	getSprite()
+	if oldType != type:
+		oldType = type
+		getSprite()
 	if dragging:
 		var new_position = get_global_mouse_position() - drag_offset
 		
