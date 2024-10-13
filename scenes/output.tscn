@@ -1,9 +1,41 @@
-[gd_scene load_steps=2 format=3 uid="uid://bhgwkcbd6mka5"]
+[gd_scene load_steps=7 format=3 uid="uid://bhgwkcbd6mka5"]
 
 [ext_resource type="Script" path="res://scripts/output.gd" id="1_j4b86"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gvm7n"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kme0q"]
+bg_color = Color(0.999731, 0.0580776, 0.152131, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ew2r"]
+bg_color = Color(0.665808, 0, 0.077931, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1uxkl"]
+bg_color = Color(0.89324, 0.000221498, 0.119953, 1)
+
+[sub_resource type="GDScript" id="GDScript_v2xap"]
+script/source = "extends Button
+
+func _on_pressed() -> void:
+	get_parent().queue_free()
+"
 
 [node name="output" type="TextEdit"]
 offset_right = 1152.0
 offset_bottom = 648.0
 editable = false
 script = ExtResource("1_j4b86")
+
+[node name="close" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1113.0
+offset_right = 1152.0
+offset_bottom = 39.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_gvm7n")
+theme_override_styles/hover = SubResource("StyleBoxFlat_kme0q")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2ew2r")
+theme_override_styles/normal = SubResource("StyleBoxFlat_1uxkl")
+text = "X"
+script = SubResource("GDScript_v2xap")
+
+[connection signal="pressed" from="close" to="close" method="_on_pressed"]

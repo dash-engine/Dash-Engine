@@ -21,7 +21,7 @@ func compile():
 					// GENERATED WITH GEOMETRY DASH GAME ENGINE
 					let engineVersion = "1.0";
 					let Game = import "core.spwn";
-					Game.compileWatermark();
+					Game.showWatermark();
 					"""
 
 	for object_id in Global.project["objects"]:
@@ -63,6 +63,7 @@ func compile():
 		object_%s.execute();\n""" % [uid, type, pos.x, pos.y, rotation, scene_group, current_scene, uid.replace("-", "_")]
 	create_spwn("main", main_script)
 	compileCommand()
+	print(main_script)
 	Global.addToOutput("-- End compiling --",true)
 
 func _ready() -> void:
