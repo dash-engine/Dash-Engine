@@ -31,8 +31,6 @@ func compile():
 		var code = """
 					extract obj_props;
 					extract import "imports.spwn";
-					let Game = import "core.spwn";
-					let Global = import "global.spwn";
 					execute = (){
 					/* Object script */
 					%s
@@ -61,7 +59,7 @@ func compile():
 			ROTATION: %s,
 			GROUPS: [%sg, %sg]
 		});
-		object_%s.execute();\n""" % [uid, type, pos.x, pos.y, rotation, scene_group, current_scene, uid.replace("-", "_")]
+		object_%s.execute();\n""" % [uid, type, pos.x, pos.y, rotation, scene_group, scene_group+current_scene, uid.replace("-", "_")]
 	create_spwn("main", main_script)
 	compileCommand()
 	print(main_script)
