@@ -17,5 +17,5 @@ func get_type(index):
 func get_index_by_id(object_id):
 	for i in range(len(OBJECTS_IDS)):
 		if OBJECTS_IDS[i]["id"] == object_id:
-			return OBJECTS_IDS[i]["id"]
+			return i
 	return -1

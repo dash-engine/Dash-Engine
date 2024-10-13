@@ -14,7 +14,7 @@ func _process(delta: float) -> void:
 	if oldSelected != Global.current_selected_object:
 		oldSelected = Global.current_selected_object
 		var type = Objects.get_index_by_id(Global.current_selected_object.type)
-		if type > 0:
+		if type > -1:
 			objTypeBox.selected = type
 
 func _on_edit_script_pressed() -> void:
