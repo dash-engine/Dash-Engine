@@ -10,6 +10,9 @@ var current_selected_object = null
 var output = ""
 var outputRef = null
 
+var projectName = "test"
+var levelName = "test"
+
 func resetOutput():
 	toggleOutput(false)
 	output = ""
@@ -48,3 +51,10 @@ func convertProjectToJson():
 
 func wait(sec):
 	return await get_tree().create_timer(sec).timeout
+
+func saveProject():
+	var projectJson = convertProjectToJson()
+	Data.save_data(projectJson,projectName)
+
+func loadProject(projectName):
+	var projectData = Data.load_data(projectName)

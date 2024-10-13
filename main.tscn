@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cctfi18ju7m2w"]
+[gd_scene load_steps=5 format=3 uid="uid://cctfi18ju7m2w"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_48syh"]
+[ext_resource type="Theme" uid="uid://dlrca21g6xugd" path="res://assets/buttonTheme.tres" id="2_b2s04"]
 [ext_resource type="Script" path="res://scripts/properties.gd" id="2_ro366"]
 
 [sub_resource type="Theme" id="Theme_u2afu"]
@@ -37,20 +38,8 @@ layout_mode = 0
 offset_top = 524.0
 offset_right = 32.0
 offset_bottom = 555.0
+theme = ExtResource("2_b2s04")
 text = "+"
-
-[node name="compile" type="Button" parent="."]
-layout_mode = 0
-offset_left = 1080.0
-offset_right = 1152.0
-offset_bottom = 31.0
-text = "Compile"
-
-[node name="edit_global_script" type="Button" parent="."]
-layout_mode = 0
-offset_right = 72.0
-offset_bottom = 31.0
-text = "Edit global script"
 
 [node name="properties" type="Control" parent="." node_paths=PackedStringArray("nameTextBox", "uidTextBox", "editScriptButton", "objTypeBox")]
 anchors_preset = 0
@@ -88,6 +77,7 @@ offset_left = 994.0
 offset_top = 359.0
 offset_right = 1152.0
 offset_bottom = 390.0
+theme = ExtResource("2_b2s04")
 text = "Edit script"
 
 [node name="delete" type="Button" parent="properties"]
@@ -96,6 +86,7 @@ offset_left = 994.0
 offset_top = 398.0
 offset_right = 1152.0
 offset_bottom = 429.0
+theme = ExtResource("2_b2s04")
 text = "Delete object"
 
 [node name="objType" type="Control" parent="properties"]
@@ -123,8 +114,47 @@ popup/item_0/text = "block"
 popup/item_1/text = "spike"
 popup/item_1/id = 1
 
+[node name="Topbar" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 32.0
+
+[node name="compile" type="Button" parent="Topbar"]
+layout_mode = 0
+offset_left = 1080.0
+offset_right = 1152.0
+offset_bottom = 31.0
+theme = ExtResource("2_b2s04")
+text = "Compile"
+
+[node name="edit_global_script" type="Button" parent="Topbar"]
+layout_mode = 0
+offset_left = 90.0
+offset_right = 227.0
+offset_bottom = 31.0
+theme = ExtResource("2_b2s04")
+text = "Edit global script"
+
+[node name="saveButton" type="Button" parent="Topbar"]
+layout_mode = 0
+offset_right = 44.0
+offset_bottom = 31.0
+theme = ExtResource("2_b2s04")
+text = "Save"
+
+[node name="loadButton" type="Button" parent="Topbar"]
+layout_mode = 0
+offset_left = 44.0
+offset_right = 90.0
+offset_bottom = 31.0
+theme = ExtResource("2_b2s04")
+text = "Load
+"
+
 [connection signal="pressed" from="addObj" to="." method="_on_button_pressed"]
-[connection signal="pressed" from="compile" to="." method="_on_compile_pressed"]
-[connection signal="pressed" from="edit_global_script" to="." method="_on_edit_global_script_pressed"]
 [connection signal="pressed" from="properties/editScript" to="properties" method="_on_edit_script_pressed"]
 [connection signal="item_selected" from="properties/objType/objType" to="properties" method="_on_obj_type_item_selected"]
+[connection signal="pressed" from="Topbar/compile" to="." method="_on_compile_pressed"]
+[connection signal="pressed" from="Topbar/edit_global_script" to="." method="_on_edit_global_script_pressed"]
+[connection signal="pressed" from="Topbar/saveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="Topbar/loadButton" to="." method="_on_load_button_pressed"]

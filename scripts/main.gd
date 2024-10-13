@@ -22,3 +22,9 @@ func _on_edit_global_script_pressed() -> void:
 	var clone = load("res://scenes/scriptEditor.tscn").instantiate()
 	clone.uid = "global"
 	get_tree().root.add_child(clone)
+
+func _on_save_button_pressed() -> void:
+	Global.saveProject()
+
+func _on_load_button_pressed() -> void:
+	Global.loadProject("test")

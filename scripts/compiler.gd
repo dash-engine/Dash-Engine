@@ -76,10 +76,9 @@ func create_spwn(fname, code):
 
 func compileCommand():
 	var filename = "main.spwn"
-	var project_name = "project"
 	
 	var command = "spwn"
-	var arguments = ["build", OS.get_user_data_dir()+"/temp/"+filename, "--level-name", '"test"']
+	var arguments = ["build", OS.get_user_data_dir()+"/temp/"+filename, "--level-name", '"%s"' % Global.levelName]
 	
 	var output = []
 	var error_code = OS.execute(command, arguments, output, true, true)
