@@ -1,12 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://b3c2qma3c54y5"]
+[gd_scene load_steps=4 format=3 uid="uid://b3c2qma3c54y5"]
 
 [ext_resource type="Script" path="res://scripts/object.gd" id="1_o6dpd"]
-[ext_resource type="Texture2D" uid="uid://dxdw4det2i8rv" path="res://assets/sprites/obj/blocks/classic.png" id="2_qqa8k"]
+[ext_resource type="Texture2D" path="res://assets/sprites/obj/blocks/classic.png" id="2_qqa8k"]
 
-[node name="object" type="Panel"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cfe4d"]
+
+[node name="object" type="Panel" node_paths=PackedStringArray("Sprite")]
 offset_right = 40.0
 offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_cfe4d")
 script = ExtResource("1_o6dpd")
+Sprite = NodePath("Sprite2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(20, 20)

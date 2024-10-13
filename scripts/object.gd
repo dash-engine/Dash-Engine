@@ -1,6 +1,7 @@
 extends Panel
 
 @export var canvas : Control
+@export var Sprite : Sprite2D
 
 @export var canvas_rect : Rect2
 @export var dragging = false
@@ -52,6 +53,7 @@ func _gui_input(event):
 				pass
 
 func _process(delta):
+	getSprite()
 	if dragging:
 		var new_position = get_global_mouse_position() - drag_offset
 		
@@ -64,3 +66,9 @@ func _process(delta):
 		position = new_position
 	if alrPressed:
 		pressed()
+
+func getSprite():
+	var spritesFolder = "res://assets/sprites/obj/"
+	var objSprite = spritesFolder + Objects.get_object_name(Objects.get_index_by_id(type)) + ".png"
+	Sprite.texture = load(objSprite)
+	print(objSprite)
