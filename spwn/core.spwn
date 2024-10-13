@@ -4,18 +4,12 @@
 extract obj_props;
 
 // Variables
-let EngineName = "Geometry Dash Game Engine";
+let coreVersion = "0.0.1";
 let currentScene = 0;
 let scenes = 0;
 
 // Function to create text objects
 create_text = (text, txt_x, txt_y) {
-    $.add(obj {
-        OBJ_ID: 211,
-        X: 0,
-        Y: 0
-    });
-
     $.add(text.to_obj().with(X, txt_x).with(Y, txt_y).with(SCALING, 0.6));
 };
 
@@ -41,10 +35,12 @@ change_scene = (sceneID) {
     currentScene = sceneID;
 };
 
-compileWatermark = (){
-$.print("Add watermark")
-create_text("Made with Geometry Dash Game Engine", 0, -1000);
-create_text("Github: github.com/MikeDeev/GDEngine", 0, -960);
+showWatermark = (){
+create_text("Made with Geometry Dash Game Engine", -50, 2000);
+create_text("Github: github.com/MikeDeev/GDEngine", -50, 1960);
+// Core version text
+create_text("Using core ver:", -50, 1940);
+create_text(coreVersion,50,940);
 }
 
 return {
