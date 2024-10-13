@@ -1,0 +1,21 @@
+extends Node
+
+var OBJECTS_IDS = [
+	{
+		"id": 1,
+		"block": "block"
+	},
+	{
+		"id": 8,
+		"block": "spike"
+	}
+]
+
+func get_type(index):
+	return OBJECTS_IDS[index]["id"]
+
+func get_index_by_id(object_id):
+	for i in range(len(OBJECTS_IDS)):
+		if OBJECTS_IDS[i]["id"] == object_id:
+			return OBJECTS_IDS[i]["id"]
+	return -1

@@ -1,0 +1,45 @@
+property = (id: @number, pat: @pattern | @type_indicator, name: @string) {
+    return @object_key::{id, pattern: pat, name}
+}
+
+type @cam_mode
+
+cam_mode = (id: @number) {
+    return @cam_mode::{id}
+}
+
+impl @cam_mode
+{
+    _display_ : (self) {
+        return match self.id {
+            ==0: "NONE",
+            ==1: "X ONLY",
+            ==2: "Y ONLY"
+            else: $._display_(self)
+        }
+    }
+}
+
+return {
+    cam_props:
+    {
+        ZOOM: property(371, @number, "ZOOM"),
+        STATIC_TARGET: property(71, @group, "STATIC_TARGET"),
+        STATIC_EXIT: property(110, @bool, "STATIC_EXIT"),
+        STATIC_FOLLOW: property(212, @bool, "STATIC_FOLLOW"),
+        STATIC_FOLLOW_EASING: property(213, @number, "STATIC_FOLLOW_EASING"),
+        STATIC_SMOOTH_VELOCITY: property(453, @bool, "STATIC_SMOOTH_VELOCITY"),
+        STATIC_SMOOTH_VELOCITY_MODIFIER: property(454, @number, "STATIC_SMOOTH_VELOCITY_MODIFIER"),
+        STATIC_EXIT_INSTANT: property(465, @bool, "STATIC_EXIT_INSTANT"),
+        OFFSET_X: property(28, @number, "OFFSET_X"),
+        OFFSET_Y: property(29, @number, "OFFSET_Y"),
+        OFFSET_MODE: property(101, @number, "OFFSET_MODE"),
+    },
+    modes:
+    {
+        NONE: cam_mode(0),
+        X_ONLY: cam_mode(1),
+        Y_ONLY: cam_mode(2)
+    },
+    cam_mode: @cam_mode
+}

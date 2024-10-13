@@ -17,15 +17,17 @@ extends Panel
 var alrPressed = false
 var pressedDebounce = false
 
+const GRID_SIZE = 8
+
 func _ready() -> void:
 	uid = UID.generate()
-	Global.saveObject(uid,Name,Position,type,Rotation)
-	Global.saveScript(uid,"")
+	Global.saveObject(uid, Name, Position, type, Rotation)
+	Global.saveScript(uid, "")
 	if canvas == null:
 		if get_parent():
 			if get_parent().is_class("Control"):
 				canvas = get_parent()
-	canvas_rect = Rect2(canvas.position-Vector2(146,32),canvas.size)
+	canvas_rect = Rect2(canvas.position - Vector2(146, 32), canvas.size)
 
 func pressed():
 	if pressedDebounce == false:
@@ -38,7 +40,7 @@ func _gui_input(event):
 			if event.pressed:
 				dragging = true
 				alrPressed = true
-				drag_offset = get_global_mouse_position() - position 
+				drag_offset = get_global_mouse_position() - position
 			else:
 				pressedDebounce = false
 				alrPressed = false
@@ -53,8 +55,11 @@ func _process(delta):
 	if dragging:
 		var new_position = get_global_mouse_position() - drag_offset
 		
-		new_position.x = clamp(new_position.x, canvas_rect.position.x, canvas_rect.position.x + canvas_rect.size.x - size.x)  # Corrected 'rect_size' to 'size'
-		new_position.y = clamp(new_position.y, canvas_rect.position.y, canvas_rect.position.y + canvas_rect.size.y - size.y)  # Corrected 'rect_size' to 'size'
+		new_position.x = clamp(new_position.x, canvas_rect.position.x, canvas_rect.position.x + canvas_rect.size.x - size.x)
+		new_position.y = clamp(new_position.y, canvas_rect.position.y, canvas_rect.position.y + canvas_rect.size.y - size.y)
+		
+		new_position.x = round(new_position.x / GRID_SIZE) * GRID_SIZE
+		new_position.y = round(new_position.y / GRID_SIZE) * GRID_SIZE
 		
 		position = new_position
 	if alrPressed:

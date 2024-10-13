@@ -1,8 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://b3c2qma3c54y5"]
+[gd_scene load_steps=3 format=3 uid="uid://b3c2qma3c54y5"]
 
 [ext_resource type="Script" path="res://scripts/object.gd" id="1_o6dpd"]
+[ext_resource type="Texture2D" uid="uid://dxdw4det2i8rv" path="res://assets/sprites/obj/blocks/classic.png" id="2_qqa8k"]
 
 [node name="object" type="Panel"]
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_o6dpd")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(20, 20)
+scale = Vector2(0.333333, 0.333333)
+texture = ExtResource("2_qqa8k")

@@ -85,17 +85,17 @@ editable = false
 [node name="editScript" type="Button" parent="properties"]
 layout_mode = 0
 offset_left = 994.0
-offset_top = 229.0
+offset_top = 359.0
 offset_right = 1152.0
-offset_bottom = 260.0
+offset_bottom = 390.0
 text = "Edit script"
 
 [node name="delete" type="Button" parent="properties"]
 layout_mode = 0
 offset_left = 994.0
-offset_top = 273.0
+offset_top = 398.0
 offset_right = 1152.0
-offset_bottom = 304.0
+offset_bottom = 429.0
 text = "Delete object"
 
 [node name="objType" type="Control" parent="properties"]
@@ -118,8 +118,13 @@ offset_left = 994.0
 offset_top = 120.0
 offset_right = 1152.0
 offset_bottom = 146.0
+item_count = 2
+popup/item_0/text = "block"
+popup/item_1/text = "spike"
+popup/item_1/id = 1
 
 [connection signal="pressed" from="addObj" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="compile" to="." method="_on_compile_pressed"]
 [connection signal="pressed" from="edit_global_script" to="." method="_on_edit_global_script_pressed"]
 [connection signal="pressed" from="properties/editScript" to="properties" method="_on_edit_script_pressed"]
+[connection signal="item_selected" from="properties/objType/objType" to="properties" method="_on_obj_type_item_selected"]

@@ -1,16 +1,14 @@
+// ENGINE CORE
+// DO NOT MODIFY THIS UNLESS YOU KNOW WHAT ARE YOU DOING
+
 extract obj_props;
 
-/*
-SETUP
-*/
+// Variables
 let EngineName = "Geometry Dash Game Engine";
 let currentScene = 0;
 let scenes = 0;
 
-/*
-FUNCTIONS
-*/
-
+// Function to create text objects
 create_text = (text, txt_x, txt_y) {
     $.add(obj {
         OBJ_ID: 211,
@@ -21,16 +19,18 @@ create_text = (text, txt_x, txt_y) {
     $.add(text.to_obj().with(X, txt_x).with(Y, txt_y).with(SCALING, 0.6));
 };
 
+// Function to count scenes
 countScene = () {
     scenes += 1;
 };
 
+// Function to change the current scene
 change_scene = (sceneID) {
     // Hide all scenes
     let groupModifying = 800g;
     let i = 0;
 
-    while i <= scenes {
+    while (i <= scenes) {
         groupModifying.alpha(0);
         groupModifying++;
         i++;
@@ -41,6 +41,15 @@ change_scene = (sceneID) {
     currentScene = sceneID;
 };
 
-//Watermark (If you're editing the source code please do not remove this)
+compileWatermark = (){
+$.print("Add watermark")
 create_text("Made with Geometry Dash Game Engine", 0, -1000);
 create_text("Github: github.com/MikeDeev/GDEngine", 0, -960);
+}
+
+return {
+create_text: create_text,
+change_scene: change_scene,
+countScene: countScene,
+compileWatermark: compileWatermark,
+}

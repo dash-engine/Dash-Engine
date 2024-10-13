@@ -1,0 +1,60 @@
+constants = import "cam_constants.spwn";
+extract constants;
+extract cam_props;
+extract modes;
+extract obj_props;
+
+return {
+    camera_zoom: #[desc("Implementation of the zoom trigger"), example("camera_zoom(2)")]
+    (
+        #[desc("Zoom value")] zoom: @number,
+        #[desc("Duration of zoom")] duration: @number = 0.5
+    ) -> @NULL {
+        $.add( trigger {
+            OBJ_ID: 1913,
+            ZOOM: zoom,
+            DURATION: duration,
+        })
+        wait(duration)
+    },
+    static_camera: #[desc("Implementation of the static camera trigger"), example("static_camera(1g)")]
+    (
+        #[desc("Target")] target: @group,
+        #[desc("Duration of zoom")] duration: @number = 0.5,
+        #[desc("Exit static")] exit_static: @bool = false,
+        #[desc("Instant exit")] instant_exit: @bool = false,
+        #[desc("Follow easing")] easing: @number = 0,
+        #[desc("follow")] follow: @bool = false,
+        #[desc("Smooth velocity")] smooth_velocity: @bool = false,
+        #[desc("Smooth velocity modifier")] smooth_velocity_mod: @number = 0
+    ) -> @NULL {
+        $.add( trigger {
+            OBJ_ID: 1914,
+            STATIC_TARGET: target,
+            DURATION: duration,
+            STATIC_EXIT: exit_static,
+            STATIC_EXIT_INSTANT: instant_exit,
+            STATIC_FOLLOW_EASING: easing,
+            STATIC_FOLLOW: follow,
+            STATIC_SMOOTH_VELOCITY: smooth_velocity,
+            STATIC_SMOOTH_VELOCITY_MODIFIER: smooth_velocity_mod,
+        })
+        wait(duration)
+    },
+    camera_offset: #[desc("Implementation of the camera offset trigger"), example("camera_offset(30, 25)")]
+    (
+        #[desc("X offset")] x_offset: @number,
+        #[desc("Y offset")] y_offset: @number,
+        #[desc("Duration of movement")] duration: @number = 0.5,
+        #[desc("Mode(NONE/X_ONLY,Y_ONLY)")] mode: @cam_mode = NONE,
+    ) -> @NULL {
+        $.add( trigger {
+            OBJ_ID: 1916,
+            OFFSET_X: x_offset,
+            OFFSET_Y: y_offset,
+            DURATION: duration,
+            OFFSET_MODE: mode.id
+        })
+        wait(duration)
+    },
+}

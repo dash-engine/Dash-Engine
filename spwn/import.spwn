@@ -1,2 +1,11 @@
-new_counter = import "new_counter.spwn"
+/* Global imports */
+new_counter = import "new_counter.spwn";
+game = import "core.spwn";
+random = import "rand.spwn";
+camera = import "camera_triggers.spwn";
 
+return {
+new_counter: new_counter,
+random: random,
+camera: camera,
+}
