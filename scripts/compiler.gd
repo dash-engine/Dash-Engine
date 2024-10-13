@@ -34,7 +34,7 @@ func compile():
 					/* Object script */
 					%s
 					};
-					return execute;
+					return {execute: execute};
 		""" % script
 		objects_path.append(create_spwn("object_" + uid.replace("-", "_"), code))
 	
@@ -58,7 +58,7 @@ func compile():
 			ROTATION: %f,
 			GROUPS: [800g, %sg]
 		});
-		//object_%s.execute();\n""" % [uid, type, pos.x, pos.y, rotation, current_scene + 800, uid.replace("-", "_")]
+		object_%s.execute();\n""" % [uid, type, pos.x, pos.y, rotation, current_scene + 800, uid.replace("-", "_")]
 	create_spwn("main", main_script)
 	compileCommand()
 	Global.addToOutput("-- End compiling --",true)
