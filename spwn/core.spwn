@@ -47,5 +47,5 @@ return {
 create_text: create_text,
 change_scene: change_scene,
 countScene: countScene,
-compileWatermark: compileWatermark,
+showWatermark: showWatermark,
 }
