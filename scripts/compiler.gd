@@ -30,6 +30,7 @@ func compile():
 		var script = Global.project["scripts"].get(uid, "")
 		var code = """
 					extract obj_props;
+					extract import "imports.spwn";
 					let Game = import "core.spwn";
 					let Global = import "global.spwn";
 					execute = (){
