@@ -30,7 +30,7 @@ func compile():
 					extract obj_props;
 					let Game = import "core.spwn";
 					let Global = import "global.spwn";
-					execute = {
+					execute = !{
 					/* Object script */
 					%s
 					};

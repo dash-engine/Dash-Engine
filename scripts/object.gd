@@ -71,4 +71,3 @@ func getSprite():
 	var spritesFolder = "res://assets/sprites/obj/"
 	var objSprite = spritesFolder + Objects.get_object_name(Objects.get_index_by_id(type)) + ".png"
 	Sprite.texture = load(objSprite)
-	print(objSprite)
