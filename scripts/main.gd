@@ -2,6 +2,9 @@ extends Control
 
 @export var canvas : ColorRect
 
+func _ready() -> void:
+	Global.objectConainer = canvas
+
 func _on_canvas_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		pass

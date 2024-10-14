@@ -27,3 +27,7 @@ func _on_obj_type_item_selected(index: int) -> void:
 	if Global.current_selected_object:
 		Global.current_selected_object.type = Objects.get_type(index)
 		Global.project["objects"][Global.current_selected_object.uid]["type"] = Objects.get_type(index)
+
+func _on_delete_pressed() -> void:
+	if Global.current_selected_object:
+		Global.deleteObject(Global.current_selected_object.uid)

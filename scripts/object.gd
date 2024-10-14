@@ -25,8 +25,9 @@ var pressedDebounce = false
 
 func _ready() -> void:
 	uid = UID.generate()
-	Global.saveObject(uid, Name, Position, type, Rotation)
+	Global.saveObject(uid, Name, Position, type, Rotation, Global.currentScene)
 	Global.saveScript(uid, "")
+	name = uid
 	if canvas == null:
 		if get_parent():
 			if get_parent().is_class("Control"):

@@ -62,7 +62,6 @@ func compile():
 		object_%s.execute();\n""" % [uid, type, pos.x, pos.y, rotation, scene_group, scene_group+current_scene, uid.replace("-", "_")]
 	create_spwn("main", main_script)
 	compileCommand()
-	print(main_script)
 	Global.addToOutput("-- End compiling --",true)
 
 func _ready() -> void:
