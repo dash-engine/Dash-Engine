@@ -23,11 +23,11 @@ func compile():
 					"""
 	
 	var scenesLibCode = """
-					hideAllScenes(){
+					hideAllScenes = !{
 						for scene in %sg..%sg{
 							scene.alpha(0)
 						}
-					}
+					};
 					""" % [Global.sceneGroup,Global.maxScenes+Global.sceneGroup]
 
 	for object_id in Global.project["objects"]:

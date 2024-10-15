@@ -29,7 +29,7 @@ var currentScene = ""
 var last_used_group = -1
 
 func _ready() -> void:
-	saveScene(UID.generate(),"main")
+	saveScene(UID.generate(),"main",sceneGroup)
 
 func resetOutput():
 	toggleOutput(false)
@@ -70,11 +70,15 @@ func saveObject(uid, Name, position, type, rotation, sceneUID, group = -1):
 
 func saveScene(uid, Name, group = -1):
 	if group == -1:
-		group == randi_range(camGroup,camGroup+2000)
+		group == randi_range(sceneGroup,sceneGroup+maxScenes)
+		for scene in project["scenes"]:
+			if group == project["scenes"][scene]["group"]:
+				group == randi_range(sceneGroup,sceneGroup+maxScenes)
+	
 	project["scenes"][uid] = {
 		"uid": uid,
 		"name": Name,
-		"group": Name,
+		"group": group,
 	}
 
 func createFile():
