@@ -119,19 +119,6 @@ popup/item_0/text = "block"
 popup/item_1/text = "spike"
 popup/item_1/id = 1
 
-[node name="objType2" type="Control" parent="properties"]
-anchors_preset = 0
-
-[node name="text" type="Label" parent="properties/objType2"]
-layout_mode = 0
-offset_left = 992.0
-offset_top = 240.0
-offset_right = 1150.0
-offset_bottom = 263.0
-text = "Groups
-"
-horizontal_alignment = 1
-
 [node name="Topbar" type="Control" parent="."]
 anchors_preset = 0
 offset_right = 1152.0
