@@ -2,6 +2,7 @@ extends Control
 
 @export var nameTextBox : TextEdit
 @export var uidTextBox : TextEdit
+@export var groupTextBox : TextEdit
 @export var editScriptButton : Button
 @export_group("ObjType")
 @export var objTypeBox : OptionButton
@@ -11,6 +12,7 @@ var oldSelected = null
 func _process(delta: float) -> void:
 	if Global.current_selected_object:
 		uidTextBox.text = Global.current_selected_object.uid
+		groupTextBox.text = "Group: " + str(Global.current_selected_object.group) + "g"
 	if oldSelected != Global.current_selected_object:
 		oldSelected = Global.current_selected_object
 		var type = Objects.get_index_by_id(Global.current_selected_object.type)

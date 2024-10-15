@@ -1,11 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://cctfi18ju7m2w"]
+[gd_scene load_steps=7 format=3 uid="uid://cctfi18ju7m2w"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_48syh"]
 [ext_resource type="Theme" uid="uid://dlrca21g6xugd" path="res://assets/buttonTheme.tres" id="2_b2s04"]
 [ext_resource type="Script" path="res://scripts/properties.gd" id="2_ro366"]
+[ext_resource type="Script" path="res://scripts/file_manager.gd" id="4_2mcld"]
 
 [sub_resource type="Theme" id="Theme_u2afu"]
 default_font_size = 16
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p8ww4"]
 
 [node name="main" type="Control" node_paths=PackedStringArray("canvas")]
 layout_mode = 3
@@ -25,30 +28,23 @@ offset_right = 994.0
 offset_bottom = 524.0
 color = Color(0.374139, 0.374139, 0.374139, 1)
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
-custom_minimum_size = Vector2(117, 512)
-layout_mode = 0
-offset_top = 32.0
-offset_right = 117.0
-offset_bottom = 544.0
-vertical_scroll_mode = 0
-
 [node name="addObj" type="Button" parent="."]
 layout_mode = 0
-offset_top = 524.0
-offset_right = 32.0
-offset_bottom = 555.0
+offset_top = 37.0
+offset_right = 146.0
+offset_bottom = 71.0
 theme = ExtResource("2_b2s04")
-text = "+"
+text = "Add object"
 
-[node name="properties" type="Control" parent="." node_paths=PackedStringArray("nameTextBox", "uidTextBox", "editScriptButton", "objTypeBox")]
+[node name="properties" type="Control" parent="." node_paths=PackedStringArray("nameTextBox", "uidTextBox", "groupTextBox", "editScriptButton", "objTypeBox")]
 anchors_preset = 0
-offset_top = 32.0
-offset_right = 40.0
-offset_bottom = 72.0
+offset_top = 4.0
+offset_right = 4.0
+offset_bottom = 4.0
 script = ExtResource("2_ro366")
 nameTextBox = NodePath("name")
 uidTextBox = NodePath("UID")
+groupTextBox = NodePath("Group")
 editScriptButton = NodePath("editScript")
 objTypeBox = NodePath("objType/objType")
 
@@ -63,11 +59,22 @@ placeholder_text = "Name"
 [node name="UID" type="TextEdit" parent="properties"]
 layout_mode = 0
 offset_left = 994.0
-offset_top = 457.0
+offset_top = 449.0
 offset_right = 1152.0
-offset_bottom = 492.0
+offset_bottom = 484.0
 theme = SubResource("Theme_u2afu")
 text = "1234-1234-1234"
+placeholder_text = "UID"
+editable = false
+
+[node name="Group" type="TextEdit" parent="properties"]
+layout_mode = 0
+offset_left = 994.0
+offset_top = 485.0
+offset_right = 1152.0
+offset_bottom = 520.0
+theme = SubResource("Theme_u2afu")
+text = "Group: 0g"
 placeholder_text = "UID"
 editable = false
 
@@ -91,8 +98,6 @@ text = "Delete object"
 
 [node name="objType" type="Control" parent="properties"]
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
 
 [node name="text" type="Label" parent="properties/objType"]
 layout_mode = 0
@@ -108,11 +113,24 @@ layout_mode = 0
 offset_left = 994.0
 offset_top = 120.0
 offset_right = 1152.0
-offset_bottom = 146.0
+offset_bottom = 151.0
 item_count = 2
 popup/item_0/text = "block"
 popup/item_1/text = "spike"
 popup/item_1/id = 1
+
+[node name="objType2" type="Control" parent="properties"]
+anchors_preset = 0
+
+[node name="text" type="Label" parent="properties/objType2"]
+layout_mode = 0
+offset_left = 992.0
+offset_top = 240.0
+offset_right = 1150.0
+offset_bottom = 263.0
+text = "Groups
+"
+horizontal_alignment = 1
 
 [node name="Topbar" type="Control" parent="."]
 anchors_preset = 0
@@ -151,6 +169,32 @@ theme = ExtResource("2_b2s04")
 text = "Load
 "
 
+[node name="Line2D" type="Line2D" parent="Topbar"]
+points = PackedVector2Array(0, 33, 1152, 33)
+width = 3.0
+default_color = Color(0.691357, 0.691357, 0.691357, 1)
+
+[node name="fileManager" type="ItemList" parent="." node_paths=PackedStringArray("context_menu")]
+visible = false
+layout_mode = 0
+offset_top = 532.0
+offset_right = 1152.0
+offset_bottom = 648.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_p8ww4")
+max_columns = 20
+icon_mode = 0
+script = ExtResource("4_2mcld")
+context_menu = NodePath("PopupMenu")
+
+[node name="PopupMenu" type="PopupMenu" parent="fileManager"]
+size = Vector2i(134, 100)
+item_count = 3
+item_0/text = "Create text file"
+item_1/text = "Create scene"
+item_1/id = 1
+item_2/text = "rename"
+item_2/id = 2
+
 [connection signal="pressed" from="addObj" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="properties/editScript" to="properties" method="_on_edit_script_pressed"]
 [connection signal="pressed" from="properties/delete" to="properties" method="_on_delete_pressed"]
@@ -159,3 +203,6 @@ text = "Load
 [connection signal="pressed" from="Topbar/edit_global_script" to="." method="_on_edit_global_script_pressed"]
 [connection signal="pressed" from="Topbar/saveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="Topbar/loadButton" to="." method="_on_load_button_pressed"]
+[connection signal="mouse_entered" from="fileManager" to="fileManager" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="fileManager" to="fileManager" method="_on_mouse_exited"]
+[connection signal="id_pressed" from="fileManager/PopupMenu" to="fileManager" method="_on_popup_menu_id_pressed"]

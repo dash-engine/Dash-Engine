@@ -1,0 +1,41 @@
+[gd_scene load_steps=3 format=3 uid="uid://ck3a20afilm4u"]
+
+[ext_resource type="Script" path="res://scripts/get_string.gd" id="1_oiwl3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rqnyt"]
+bg_color = Color(0.121569, 0.121569, 0.121569, 0.243137)
+
+[node name="getString" type="Control" node_paths=PackedStringArray("textEdit")]
+z_index = 1000
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oiwl3")
+textEdit = NodePath("TextEdit2")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_rqnyt")
+
+[node name="TextEdit2" type="TextEdit" parent="."]
+layout_mode = 0
+offset_left = 416.0
+offset_top = 294.0
+offset_right = 716.0
+offset_bottom = 350.0
+
+[node name="accept" type="Button" parent="."]
+z_index = 10
+custom_minimum_size = Vector2(300, 0)
+offset_left = 416.0
+offset_top = 355.0
+offset_right = 716.0
+offset_bottom = 386.0
+text = "Accept"
+
+[connection signal="pressed" from="accept" to="." method="_on_accept_pressed"]

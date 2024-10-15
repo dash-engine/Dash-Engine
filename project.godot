@@ -24,3 +24,8 @@ ansi_parser="*res://scripts/ansi_parser.gd"
 Objects="*res://scripts/objects.gd"
 Data="*res://scripts/data.gd"
 Parser="*res://scripts/parser.gd"
+
+[display]
+
+window/stretch/mode="viewport"
+window/stretch/aspect="expand"

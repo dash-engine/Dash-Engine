@@ -3,8 +3,6 @@ extends Node
 var dir = "user://temp"
 var temp = 1
 
-const scene_group = 500
-
 func compile():
 	temp += 1
 	Global.resetOutput()
@@ -49,7 +47,8 @@ func compile():
 		var pos = object["position"]
 		var rotation = object.get("rotation", 0.0)
 		var type = object["type"]
-
+		var objectGroup = object["group"]
+		
 		main_script += """
 		/* Object: %s */
 		$.add(obj {
@@ -57,9 +56,9 @@ func compile():
 			X: %s,
 			Y: %s,
 			ROTATION: %s,
-			GROUPS: [%sg, %sg]
+			GROUPS: [%sg, %sg, %sg]
 		});
-		object_%s.execute();\n""" % [uid, type, pos.x, pos.y, rotation, scene_group, scene_group+current_scene, uid.replace("-", "_")]
+		object_%s.execute();\n""" % [uid, type, pos.x, pos.y, rotation, Global.sceneGroup, Global.sceneGroup+current_scene, objectGroup, uid.replace("-", "_")]
 	create_spwn("main", main_script)
 	compileCommand()
 	Global.addToOutput("-- End compiling --",true)

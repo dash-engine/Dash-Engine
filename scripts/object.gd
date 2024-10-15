@@ -18,6 +18,8 @@ const GRID_SIZE = 8
 
 @export var type = 1
 
+@export var group = -1
+
 var alrPressed = false
 var pressedDebounce = false
 
@@ -28,6 +30,7 @@ func _ready() -> void:
 	Global.saveObject(uid, Name, Position, type, Rotation, Global.currentScene)
 	Global.saveScript(uid, "")
 	name = uid
+	group = Global.project["objects"][uid]["group"]
 	if canvas == null:
 		if get_parent():
 			if get_parent().is_class("Control"):

@@ -4,7 +4,13 @@ var project = {
 	"scripts": {"global":""},
 	"objects": {},
 	"scenes": {},
+	"files": {},
+	"groups": []
 }
+
+
+const sceneGroup = 1001
+const maxObjects = 1000
 
 var objectConainer = null
 
@@ -17,6 +23,8 @@ var projectName = "test"
 var levelName = "test"
 
 var currentScene = ""
+
+var last_used_group = -1
 
 func _ready() -> void:
 	saveScene(UID.generate(),"main")
@@ -44,20 +52,35 @@ func toggleOutput(create = outputRef == null):
 func saveScript(uid, code):
 	project["scripts"][uid] = code
 
-func saveObject(uid, Name, position, type, rotation, sceneUID):
+func saveObject(uid, Name, position, type, rotation, sceneUID, group = -1):
+	if group == -1:
+		group = get_next_group()
+	last_used_group = group
 	project["objects"][uid] = {
 		"uid": uid,
 		"name": Name,
 		"position": position,
 		"rotation": rotation,
 		"type": type,
-		"sceneUID": sceneUID
+		"sceneUID": sceneUID,
+		"group": group,
 	}
 
 func saveScene(uid, Name):
 	project["scenes"][uid] = {
 		"uid": uid,
-		"name": Name
+		"name": Name,
+	}
+
+func createFile():
+	var Name = await get_string("File name")
+	saveFile(UID.generate(),Name,"")
+
+func saveFile(uid, Name, content):
+	project["files"][uid] = {
+		"uid": uid,
+		"name": Name,
+		"content": content,
 	}
 
 func convertProjectToJson():
@@ -76,6 +99,8 @@ func loadProject(projectName):
 
 func deleteObject(uid):
 	if uid in project["objects"]:
+		var group_to_delete = project["objects"][uid]["group"]
+		project["groups"].erase(group_to_delete)
 		current_selected_object = null
 		if objectConainer:
 			objectConainer.get_node(uid).queue_free()
@@ -88,3 +113,22 @@ func deleteScene(uid):
 		project["scenes"].erase(uid)
 	else:
 		print("No scene found with uid: ", uid)
+
+func get_string(question = ""):
+	var clone = load("res://scenes/getString.tscn").instantiate()
+	get_tree().root.add_child(clone)
+	await clone.accepted == true
+	print(clone.accepted)
+	clone.queue_free()
+	return clone.response
+
+func get_next_group() -> int:
+	if last_used_group == -1:
+		last_used_group = 0
+	else:
+		last_used_group += 1
+	
+	if last_used_group not in project["groups"]:
+		project["groups"].append(last_used_group)
+	
+	return last_used_group
