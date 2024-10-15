@@ -37,7 +37,7 @@ change_scene = (sceneID) {
 
 showWatermark = (){
 create_text("Made with Geometry Dash Game Engine", -50, 2000);
-create_text("Github: github.com/MikeDeev/GDEngine", -50, 1960);
+create_text("Github: github.com/dash-engine/Dash-Engine", -50, 1960);
 // Core version text
 create_text("Using core ver:", -50, 1940);
 create_text(coreVersion,50,940);
