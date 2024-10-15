@@ -21,6 +21,14 @@ func compile():
 					let Game = import "core.spwn";
 					Game.showWatermark();
 					"""
+	
+	var scenesLibCode = """
+					hideAllScenes(){
+						for scene in %sg..%sg{
+							scene.alpha(0)
+						}
+					}
+					""" % [Global.sceneGroup,Global.maxScenes+Global.sceneGroup]
 
 	for object_id in Global.project["objects"]:
 		var object = Global.project["objects"][object_id]
@@ -59,7 +67,24 @@ func compile():
 			GROUPS: [%sg, %sg, %sg]
 		});
 		object_%s.execute();\n""" % [uid, type, pos.x, pos.y, rotation, Global.sceneGroup, Global.sceneGroup+current_scene, objectGroup, uid.replace("-", "_")]
+	var sceneCenterX = 200
+	var sceneCenterY = 200
+	var currentCamGroup = 0
+	for scene in Global.project["scenes"]:
+		currentCamGroup+=1
+		main_script += """
+			// Create scenes
+			$.add(obj {
+				OBJ_ID: 60,
+				X: %s,
+				Y: %s,
+				ROTATION: 0,
+				GROUPS: %sg
+			});
+			
+		""" % [sceneCenterX,sceneCenterY,currentCamGroup+Global.camGroup]
 	create_spwn("main", main_script)
+	create_spwn("scenes", scenesLibCode)
 	compileCommand()
 	Global.addToOutput("-- End compiling --",true)
 

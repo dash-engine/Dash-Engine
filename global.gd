@@ -10,7 +10,9 @@ var project = {
 
 
 const sceneGroup = 1001
+const maxScenes = 1000
 const maxObjects = 1000
+const camGroup = 6000
 
 var objectConainer = null
 
@@ -66,10 +68,13 @@ func saveObject(uid, Name, position, type, rotation, sceneUID, group = -1):
 		"group": group,
 	}
 
-func saveScene(uid, Name):
+func saveScene(uid, Name, group = -1):
+	if group == -1:
+		group == randi_range(camGroup,camGroup+2000)
 	project["scenes"][uid] = {
 		"uid": uid,
 		"name": Name,
+		"group": Name,
 	}
 
 func createFile():

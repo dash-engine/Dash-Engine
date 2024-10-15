@@ -1,22 +1,15 @@
 extends Node
 
+## This is a parser for custom functions ##
+
 var function_map = [
 	{
-		"func": "create_object",
-		"arguments": ["object_id", "x", "y", "rotation", "groups"],
-		"command": """
-$.add(obj {
-	OBJ_ID: object_id,
-	X: {x},
-	Y: {y},
-	ROTATION: {rotation},
-	GROUPS: [{groups}]
-});"""
-	},
-	{
 		"func": "change_scene",
-		"arguments": ["sceneUID"],
-		"command": ""
+		"arguments": ["sceneName"],
+		"command": """
+		Scene.hideScenes()
+		Scene.showScene{sceneName}()
+		"""
 	},
 ]
 
