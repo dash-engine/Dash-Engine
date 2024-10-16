@@ -13,3 +13,4 @@ mono_crash.*.json
 cef_artifacts/
 list.txt/
 list.txt
+oldCompiler.gd

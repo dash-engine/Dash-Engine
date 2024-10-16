@@ -7,28 +7,84 @@ func compile():
 	temp += 1
 	Global.resetOutput()
 	await Global.wait(0.5)
-	Global.addToOutput("--- Start compiling ---",true)
+	Global.addToOutput("--- Start compiling ---", true)
 	deleteTempDir()
 	var current_scene = 1
 	var objects_path = []
 	create_spwn("global", Global.project["scripts"]["global"])
 	duplicateCoreFiles()
-	
+
 	var main_script = """
 					extract obj_props;
+					extract import "imports.spwn";
 					// GENERATED WITH GEOMETRY DASH GAME ENGINE
 					let engineVersion = "1.0";
 					let Game = import "core.spwn";
 					Game.showWatermark();
 					"""
-	
+
 	var scenesLibCode = """
+					let camera = import "camera_triggers.spwn";
 					hideAllScenes = !{
-						for scene in %sg..%sg{
+						for scene in %sg..%sg {
 							scene.alpha(0)
 						}
 					};
-					""" % [Global.sceneGroup,Global.maxScenes+Global.sceneGroup]
+					exitAllCameras = !{
+						for camGroup in %sg..%sg {
+							camera.static_camera(camGroup, exit_static=true, instant_exit=true);
+						}
+					};
+					""" % [Global.sceneGroup, Global.maxScenes + Global.sceneGroup, Global.camGroup, Global.camGroup + Global.maxScenes]
+
+	var sceneCenterX = 200
+	var sceneCenterY = 200
+	var currentCamGroup = 0
+	var mainCamGroup = Global.camGroup
+
+	main_script += """
+		camera.static_camera(%sg, duration=0);
+	""" % mainCamGroup
+
+	for scene in Global.project["scenes"]:
+		currentCamGroup += 1
+		var centerX = sceneCenterX
+		var centerY = sceneCenterY
+		var sceneCamGroup = Global.camGroup + currentCamGroup
+
+		main_script += """
+			$.add(obj {
+				OBJ_ID: 60,
+				X: %s,
+				Y: %s,
+				ROTATION: 0,
+				GROUPS: %sg
+			});
+			camera.static_camera(%sg, duration=0);
+		""" % [centerX, centerY, sceneCamGroup, sceneCamGroup]
+
+		for object_id in Global.project["objects"]:
+			var object = Global.project["objects"][object_id]
+			var uid = object["uid"]
+			var pos = object["position"]
+			var rotation = object.get("rotation", 0.0)
+			var type = object["type"]
+			var objectGroup = object["group"]
+
+			var centeredX = (centerX + pos.x)/2
+			var centeredY = (centerY + pos.y)/2
+
+			main_script += """
+			/* Object: %s */
+			$.add(obj {
+				OBJ_ID: %s,
+				X: %s,
+				Y: %s,
+				ROTATION: %s,
+				GROUPS: [%sg, %sg, %sg]
+			});
+			object_%s.execute();
+			""" % [uid, type, centeredX, centeredY, rotation, Global.sceneGroup, Global.sceneGroup + current_scene, objectGroup, uid.replace("-", "_")]
 
 	for object_id in Global.project["objects"]:
 		var object = Global.project["objects"][object_id]
@@ -45,48 +101,17 @@ func compile():
 		""" % script
 		objects_path.append(create_spwn("object_" + uid.replace("-", "_"), code))
 	
+	var final_script = ""
+	
 	for file in objects_path:
-		print(file)
-		main_script += """let %s = import "%s";\n""" % [file.replace(".spwn", ""), file]
-
-	for object_id in Global.project["objects"]:
-		var object = Global.project["objects"][object_id]
-		var uid = object["uid"]
-		var pos = object["position"]
-		var rotation = object.get("rotation", 0.0)
-		var type = object["type"]
-		var objectGroup = object["group"]
-		
-		main_script += """
-		/* Object: %s */
-		$.add(obj {
-			OBJ_ID: %s,
-			X: %s,
-			Y: %s,
-			ROTATION: %s,
-			GROUPS: [%sg, %sg, %sg]
-		});
-		object_%s.execute();\n""" % [uid, type, pos.x, pos.y, rotation, Global.sceneGroup, Global.sceneGroup+current_scene, objectGroup, uid.replace("-", "_")]
-	var sceneCenterX = 200
-	var sceneCenterY = 200
-	var currentCamGroup = 0
-	for scene in Global.project["scenes"]:
-		currentCamGroup+=1
-		main_script += """
-			// Create scenes
-			$.add(obj {
-				OBJ_ID: 60,
-				X: %s,
-				Y: %s,
-				ROTATION: 0,
-				GROUPS: %sg
-			});
-			
-		""" % [sceneCenterX,sceneCenterY,currentCamGroup+Global.camGroup]
-	create_spwn("main", main_script)
+		final_script += """
+		let %s = import "%s";\n
+		""" % [file.replace(".spwn", ""), file]
+	final_script += main_script
+	create_spwn("main", final_script)
 	create_spwn("scenes", scenesLibCode)
 	compileCommand()
-	Global.addToOutput("-- End compiling --",true)
+	Global.addToOutput("-- End compiling --", true)
 
 func _ready() -> void:
 	compile()
@@ -103,8 +128,8 @@ func compileCommand():
 	var filename = "main.spwn"
 	
 	var command = "spwn"
-	var arguments = ["build", OS.get_user_data_dir()+"/temp/"+filename, "--level-name", '"%s"' % Global.levelName]
-	
+	var arguments = ["build", '"'+OS.get_user_data_dir()+"/temp/"+filename+'"', "--level-name", '"%s"' % Global.levelName]
+	print('"'+OS.get_user_data_dir()+"/temp/"+filename+'"')
 	var output = []
 	var error_code = OS.execute(command, arguments, output, true, true)
 	
@@ -112,14 +137,19 @@ func compileCommand():
 	
 	if error_code != OK:
 		print("exit with error: ", error_code)
+		print("Output: ", output[0])
+
+func file_exist(fileName):
+	var dir = DirAccess.open("user://")
+	return dir.file_exists(fileName)
 
 func deleteTempDir():
 	var path = dir
+	if !file_exist("temp"):
+		DirAccess.make_dir_absolute(path)
 	var directory = DirAccess.open(path)
-
 	if directory.get_open_error() == OK:
 		directory.list_dir_begin()
-		
 		var file_name = directory.get_next()
 		while file_name != "":
 			if file_name != "." and file_name != ".." and not directory.current_is_dir():
@@ -127,7 +157,6 @@ func deleteTempDir():
 				if directory.remove(filePath) != OK:
 					print("Failed to delete file: ", filePath)
 			file_name = directory.get_next()
-
 		directory.list_dir_end()
 	else:
 		print("Error opening directory: ", path)
@@ -148,4 +177,4 @@ func duplicateCoreFiles():
 					directory.copy(original_file_path, new_file_path)
 			file_name = directory.get_next()
 
-		directory.list_dir_end()
+		directory.list_dir_end() 

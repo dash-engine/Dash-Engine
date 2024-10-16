@@ -5,7 +5,7 @@
 This is an engine made for making games in geometry dash.
 
 # Setup
-Make sure have [spwn](https://github.com/Spu7Nix/SPWN-language/releases/tag/v0.8-beta) or it won't work.
+Make sure have [SPWN](https://github.com/Spu7Nix/SPWN-language/releases/tag/v0.8-beta) or it won't work.
 
 Run these commands on a command prompt:
 ```

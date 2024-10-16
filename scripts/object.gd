@@ -50,6 +50,7 @@ func _gui_input(event):
 				alrPressed = true
 				drag_offset = get_global_mouse_position() - position
 			else:
+				Global.project["objects"][uid]["position"] = position
 				pressedDebounce = false
 				alrPressed = false
 				dragging = false
