@@ -4,8 +4,9 @@ extends Control
 @export var code: TextEdit
 
 func _ready() -> void:
+	print("Script UID: ", uid)
 	if Global.project["scripts"].has(uid):
-		print(Global.project["scripts"][uid])
+		code.text = Global.project["scripts"][uid]
 
 func _on_close_pressed() -> void:
 	queue_free()

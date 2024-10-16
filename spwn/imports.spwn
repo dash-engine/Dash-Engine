@@ -1,9 +1,9 @@
 /* Global imports */
-Global = import "global.spwn";
-game = import "core.spwn";
-new_counter = import "new_counter.spwn";
-random = import "rand.spwn";
-camera = import "camera_triggers.spwn";
+let Global = import "global.spwn";
+let game = import "core.spwn";
+let new_counter = import "new_counter.spwn";
+let random = import "rand.spwn";
+let camera = import "camera_triggers.spwn";
 let Global = import "global.spwn";
 let Scene = import "scenes.spwn";
 
@@ -11,7 +11,7 @@ return {
 Global: Global,
 Game: game,
 new_counter: new_counter,
-random: random,
+rand: random,
 camera: camera,
 Scene: Scene,
 }
