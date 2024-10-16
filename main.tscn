@@ -162,7 +162,6 @@ width = 3.0
 default_color = Color(0.691357, 0.691357, 0.691357, 1)
 
 [node name="fileManager" type="ItemList" parent="." node_paths=PackedStringArray("context_menu")]
-visible = false
 layout_mode = 0
 offset_top = 532.0
 offset_right = 1152.0
