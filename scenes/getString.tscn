@@ -3,12 +3,13 @@
 [ext_resource type="Script" path="res://scripts/get_string.gd" id="1_oiwl3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rqnyt"]
-bg_color = Color(0.121569, 0.121569, 0.121569, 0.243137)
+bg_color = Color(0, 0, 0, 0.482353)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0p2lr"]
 
 [node name="getString" type="Control" node_paths=PackedStringArray("textEdit")]
-z_index = 1000
+z_index = 10
+z_as_relative = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,14 +20,12 @@ script = ExtResource("1_oiwl3")
 textEdit = NodePath("TextEdit2")
 
 [node name="Panel" type="Panel" parent="."]
-z_index = -10
 layout_mode = 0
 offset_right = 1152.0
 offset_bottom = 648.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_rqnyt")
 
 [node name="TextEdit2" type="TextEdit" parent="."]
-z_index = 10
 layout_mode = 0
 offset_left = 416.0
 offset_top = 294.0
@@ -34,8 +33,6 @@ offset_right = 716.0
 offset_bottom = 350.0
 
 [node name="accept" type="Button" parent="."]
-z_index = 10
-custom_minimum_size = Vector2(300, 0)
 layout_mode = 0
 offset_left = 416.0
 offset_top = 355.0

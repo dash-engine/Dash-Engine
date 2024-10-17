@@ -91,7 +91,25 @@ func saveScene(uid, Name, group = -1):
 
 func createFile():
 	var Name = await get_string("File name")
-	saveFile(UID.generate(),Name,"")
+	var files = {}
+	var canContinue = true
+	for file in project["files"]:
+		if file["name"] == Name:
+			canContinue = false
+			createFile()
+			break
+	if canContinue:
+		saveFile(UID.generate(),Name,"")
+
+func get_string(question = ""):
+	var clone = await get_tree().root.get_node("main").get_string() #load("res://scenes/getString.tscn").instantiate()
+	return clone
+	clone.question = question
+	#get_tree().root.add_child(clone)
+	await clone.accepted == true
+	print(clone.accepted)
+	clone.queue_free()
+	return clone.response
 
 func saveFile(uid, Name, content):
 	project["files"][uid] = {
@@ -109,10 +127,24 @@ func wait(sec):
 
 func saveProject():
 	var projectJson = convertProjectToJson()
-	Data.save_data(projectJson,projectName)
+	if !Data.file_exist("projects"):
+		DirAccess.make_dir_absolute("user://projects")
+	Data.save_data(projectJson,"projects/"+projectName)
+	print("saving project to ", "projects/"+projectName)
 
 func loadProject(projectName):
-	var projectData = Data.load_data(projectName)
+	var fileDialog = FileDialog.new()
+	fileDialog.position = Vector2(250,100)
+	fileDialog.size = Vector2(600,400)
+	fileDialog.access = FileDialog.ACCESS_USERDATA
+	fileDialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	fileDialog.root_subfolder = "projects"
+	fileDialog.visible = true
+	get_tree().root.add_child(fileDialog)
+	fileDialog.file_selected.connect(loadProjFile)
+
+func loadProjFile(Path):
+	var projectData = Data.load_data(Path)
 
 func deleteObject(uid):
 	if uid in project["objects"]:
@@ -130,14 +162,6 @@ func deleteScene(uid):
 		project["scenes"].erase(uid)
 	else:
 		print("No scene found with uid: ", uid)
-
-func get_string(question = ""):
-	var clone = load("res://scenes/getString.tscn").instantiate()
-	get_tree().root.add_child(clone)
-	await clone.accepted == true
-	print(clone.accepted)
-	clone.queue_free()
-	return clone.response
 
 func get_next_group() -> int:
 	if last_used_group == -1:

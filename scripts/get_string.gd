@@ -6,9 +6,10 @@ extends Control
 
 signal accepted
 
+# FIXME: For some reason it wont get the input, please fix
+
 func _ready() -> void:
 	textEdit.text = question
-	textEdit.grab_focus()
 
 func _on_accept_pressed() -> void:
 	print("Accept")

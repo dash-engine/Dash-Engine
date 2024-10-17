@@ -8,6 +8,7 @@ func save_data(content, fileName):
 func load_data(fileName:String):
 	if !file_exist(fileName):
 		return
+	fileName = fileName.replace("user://","")
 	var file = FileAccess.open("user://" + fileName,FileAccess.READ)
 	var content = file.get_as_text()
 	return content

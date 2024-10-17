@@ -31,3 +31,13 @@ func _on_save_button_pressed() -> void:
 
 func _on_load_button_pressed() -> void:
 	Global.loadProject("test")
+
+func get_string(question = ""):
+	var clone = load("res://scenes/getString.tscn").instantiate()
+	clone.question = question
+	self.add_child(clone)
+	clone.grab_focus()
+	await clone.accepted == true
+	print(clone.accepted)
+	clone.queue_free()
+	return clone.response
