@@ -85,16 +85,20 @@ func compile():
 	for object_id in Global.project["objects"]:
 		var object = Global.project["objects"][object_id]
 		var uid = object["uid"]
+		var position = object["position"]
+		var rotation = object["rotation"]
 		var script = Global.project["scripts"].get(uid, "")
 		var code = """
 					extract obj_props;
 					extract import "imports.spwn";
+					let position = {x:%s,y:%s}
+					let rotation = %s
 					execute = (){
 					/* Object script */
 					%s
 					};
 					return {execute: execute};
-		""" % script
+		""" % [position.x,position.y,rotation,script]
 		objects_path.append(create_spwn("object_" + uid.replace("-", "_"), code))
 	
 	var final_script = ""

@@ -9,8 +9,8 @@ let currentScene = 0;
 let scenes = 0;
 
 // Function to create text objects
-create_text = (text, txt_x, txt_y) {
-    $.add(text.to_obj().with(X, txt_x).with(Y, txt_y).with(SCALING, 0.6));
+create_text = (text, txt_x, txt_y, group = 0g) {
+    return $.add(text.to_obj().with(X, txt_x).with(Y, txt_y).with(SCALING, 0.6).with(obj_props.GROUPS,group));
 };
 
 // Function to count scenes
