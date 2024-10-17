@@ -36,7 +36,6 @@ func get_string(question = ""):
 	var clone = load("res://scenes/getString.tscn").instantiate()
 	clone.question = question
 	self.add_child(clone)
-	clone.grab_focus()
 	await clone.accepted == true
 	print(clone.accepted)
 	clone.queue_free()

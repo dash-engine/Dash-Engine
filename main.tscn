@@ -1,10 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://cctfi18ju7m2w"]
+[gd_scene load_steps=7 format=3 uid="uid://cctfi18ju7m2w"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_48syh"]
 [ext_resource type="Theme" uid="uid://dlrca21g6xugd" path="res://assets/buttonTheme.tres" id="2_b2s04"]
 [ext_resource type="Script" path="res://scripts/properties.gd" id="2_ro366"]
 [ext_resource type="Script" path="res://scripts/file_manager.gd" id="4_2mcld"]
-[ext_resource type="PackedScene" uid="uid://ck3a20afilm4u" path="res://scenes/getString.tscn" id="5_vcyv6"]
 
 [sub_resource type="Theme" id="Theme_u2afu"]
 default_font_size = 16
@@ -183,10 +182,6 @@ item_1/text = "Create scene"
 item_1/id = 1
 item_2/text = "rename"
 item_2/id = 2
-
-[node name="getString" parent="." instance=ExtResource("5_vcyv6")]
-visible = false
-layout_mode = 1
 
 [connection signal="pressed" from="addObj" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="properties/editScript" to="properties" method="_on_edit_script_pressed"]
