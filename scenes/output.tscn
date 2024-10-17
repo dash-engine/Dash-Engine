@@ -17,6 +17,7 @@ bg_color = Color(0.89324, 0.000221498, 0.119953, 1)
 script/source = "extends Button
 
 func _on_pressed() -> void:
+	Global.outputRef = null
 	get_parent().queue_free()
 "
 

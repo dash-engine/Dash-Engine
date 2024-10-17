@@ -15,10 +15,14 @@ func parse(input: String) -> String:
 			
 			var code_parts = part.split("m")
 			if code_parts.size() > 1:
+				print(code_parts)
 				var code = code_parts[0]
 				var txt = "" 
-				
+				var addM = false
 				for i in range(1, code_parts.size()):
+					if addM:
+						txt += "m"
+					addM = true
 					txt += code_parts[i]
 				
 				if txt != "":
