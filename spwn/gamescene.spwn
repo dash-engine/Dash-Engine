@@ -1,49 +1,7 @@
-// ENGINE CORE
-// DO NOT MODIFY THIS UNLESS YOU KNOW WHAT ARE YOU DOING
-
-extract obj_props;
-
-// Variables
-let coreVersion = "0.0.1";
-let currentScene = 0;
-let scenes = 0;
-
-// Function to create text objects
-create_text = (text, txt_x, txt_y) {
-    $.add(text.to_obj().with(X, txt_x).with(Y, txt_y).with(SCALING, 0.6));
-};
-
-// Function to count scenes
-countScene = () {
-    scenes += 1;
-};
-
-// Function to change the current scene
-change_scene = (sceneID) {
-    // Hide all scenes
-    let groupModifying = 800g;
-    let i = 0;
-
-    while (i <= scenes) {
-        groupModifying.alpha(0);
-        groupModifying++;
-        i++;
-    }
-
-    let sceneGroup = 800g + sceneID;
-    sceneGroup.alpha(1);
-    currentScene = sceneID;
-};
-
-showWatermark = (){
-create_text("Made with Geometry Dash Game Engine", -50, 2000);
-create_text("Github: github.com/dash-engine/Dash-Engine", -50, 1960);
-// Core version text
-create_text("Using core ver:", -50, 1940);
-create_text(coreVersion,80,1940);
-}
-
-/* 2.2 Gamescene, Thanks to: github.com/itsmebombie/gamescene-2.2/tree/main */
+extract obj_props
+/*
+https://github.com/itsmebombie/gamescene-2.2/tree/main
+*/
 extract { // remove this once obj_props gets the 2.2 update
     HIDE_P1: @object_key::{id: 162, pattern: @bool, name: "HIDE_P1"},
     HIDE_P2: @object_key::{id: 163, pattern: @bool, name: "HIDE_P2"},
@@ -78,14 +36,8 @@ p = @trigger_function|@group
 
 // add
 add = (b,g) => b.with(TARGET, g.start_group if g.type == @trigger_function else g).add()
-/*-------------------------------------------------*/
 
 return {
-    create_text: create_text,
-    change_scene: change_scene,
-    countScene: countScene,
-    showWatermark: showWatermark,
-    /*         GAMESCENE            */
     // g = group or trigger function, p = pattern
     button: (g: p) => add(ev_down, g),
     button_end: (g: p) => add(ev_up, g),

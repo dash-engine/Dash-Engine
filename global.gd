@@ -1,8 +1,7 @@
 extends Node
 
 var project = {
-	"scripts": {"global":"""extract import "imports.spwn";
-let example_variable = "hello world";
+	"scripts": {"global":"""let example_variable = "hello world";
 example_function = !{
 	$.print("Hello world!")
 }

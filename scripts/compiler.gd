@@ -19,23 +19,18 @@ func compile():
 					extract import "imports.spwn";
 					// GENERATED WITH GEOMETRY DASH GAME ENGINE
 					let engineVersion = "1.0";
-					let Game = import "core.spwn";
 					Game.showWatermark();
 					"""
 
 	var scenesLibCode = """
 					let camera = import "camera_triggers.spwn";
-					hideAllScenes = !{
-						for scene in %sg..%sg {
-							scene.alpha(0)
-						}
+					exitCamera = (camGroup){
+						camera.static_camera(camGroup, exit_static=true, instant_exit=true);
 					};
-					exitAllCameras = !{
-						for camGroup in %sg..%sg {
-							camera.static_camera(camGroup, exit_static=true, instant_exit=true);
-						}
+					return{
+						exitCamera:exitCamera
 					};
-					""" % [Global.sceneGroup, Global.maxScenes + Global.sceneGroup, Global.camGroup, Global.camGroup + Global.maxScenes]
+					""" % [Global.sceneGroup, Global.maxScenes + Global.sceneGroup]
 
 	var sceneCenterX = 200
 	var sceneCenterY = 200
@@ -60,8 +55,9 @@ func compile():
 				ROTATION: 0,
 				GROUPS: %sg
 			});
+			%sg.alpha(0);
 			camera.static_camera(%sg, duration=0);
-		""" % [centerX, centerY, sceneCamGroup, sceneCamGroup]
+		""" % [centerX, centerY, sceneCamGroup, sceneCamGroup, sceneCamGroup]
 
 		for object_id in Global.project["objects"]:
 			var object = Global.project["objects"][object_id]
