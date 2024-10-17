@@ -37,7 +37,18 @@ var currentScene = ""
 var last_used_group = -1
 
 func _ready() -> void:
+	checkForSpwn()
 	saveScene(UID.generate(),"main",sceneGroup)
+
+func checkForSpwn():
+	var spwnoutput = []
+	var error_code = OS.execute("spwn", [], spwnoutput, true, false)
+	if spwnoutput[0].contains("SPWN code"):
+		print("SPWN installed!")
+	else:
+		OS.shell_open("https://github.com/Spu7Nix/SPWN-language/releases/tag/v0.8-beta")
+		get_tree().quit()
+		print("SPWN not installed!")
 
 func resetOutput():
 	toggleOutput(false)
