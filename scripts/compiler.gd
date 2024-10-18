@@ -13,7 +13,9 @@ func compile():
 	var objects_path = []
 	create_spwn("global", Global.project["scripts"]["global"])
 	duplicateCoreFiles()
-
+	
+	var objectsPos = {}
+	
 	var main_script = """
 					extract obj_props;
 					extract import "imports.spwn";
@@ -36,7 +38,8 @@ func compile():
 	var sceneCenterY = 200
 	var currentCamGroup = 0
 	var mainCamGroup = Global.camGroup
-
+	
+	
 	main_script += """
 		camera.static_camera(%sg, duration=0);
 	""" % mainCamGroup
@@ -66,10 +69,9 @@ func compile():
 			var rotation = object.get("rotation", 0.0)
 			var type = object["type"]
 			var objectGroup = object["group"]
-
 			var centeredX = (centerX + pos.x)/2
 			var centeredY = (centerY + pos.y)/2
-
+			objectsPos[uid] = {"x": centeredX,"y":centeredY}
 			main_script += """
 			/* Object: %s */
 			$.add(obj {
@@ -85,20 +87,22 @@ func compile():
 	for object_id in Global.project["objects"]:
 		var object = Global.project["objects"][object_id]
 		var uid = object["uid"]
-		var position = object["position"]
+		var position = objectsPos[uid]
 		var rotation = object["rotation"]
+		var group = object["group"]
 		var script = Global.project["scripts"].get(uid, "")
 		var code = """
 					extract obj_props;
 					extract import "imports.spwn";
 					let position = {x:%s,y:%s}
 					let rotation = %s
+					let this = %sg
 					execute = (){
 					/* Object script */
 					%s
 					};
 					return {execute: execute};
-		""" % [position.x,position.y,rotation,script]
+		""" % [position.x,position.y,rotation,group,script]
 		objects_path.append(create_spwn("object_" + uid.replace("-", "_"), code))
 	
 	var final_script = ""

@@ -2,6 +2,7 @@
 // DO NOT MODIFY THIS UNLESS YOU KNOW WHAT ARE YOU DOING
 
 extract obj_props;
+extract import "obj_props_2_2.spwn"
 
 // Variables
 let coreVersion = "0.0.1";
@@ -35,12 +36,26 @@ change_scene = (sceneID) {
     currentScene = sceneID;
 };
 
+endLevel = (){
+    //trigger(10000g)
+}
+
+playSound = (sound_id = 1, speed = 1, pitch = 1, loop = false){
+    $.add(obj{
+        OBJ_ID: 3602,
+        SONG_SFX_ID: sound_id,
+        SONG_SFX_SPEED: speed,
+        SFX_PITCH: pitch,
+        SONG_SFX_LOOP: loop
+    });
+};
+
 showWatermark = (){
-create_text("Made with Geometry Dash Game Engine", -50, 2000);
-create_text("Github: github.com/dash-engine/Dash-Engine", -50, 1960);
+create_text("Made with Geometry Dash Game Engine", -50, 2000+500);
+create_text("Github: github.com/dash-engine/Dash-Engine", -50, 1960+500);
 // Core version text
-create_text("Using core ver:", -50, 1940);
-create_text(coreVersion,80,1940);
+create_text("Using core ver:", -50, 1940+500);
+create_text(coreVersion,80,1940+500);
 }
 
 /* 2.2 Gamescene, Thanks to: github.com/itsmebombie/gamescene-2.2/tree/main */
@@ -85,6 +100,8 @@ return {
     change_scene: change_scene,
     countScene: countScene,
     showWatermark: showWatermark,
+    playSound: playSound,
+    endLevel: endLevel,
     /*         GAMESCENE            */
     // g = group or trigger function, p = pattern
     button: (g: p) => add(ev_down, g),
@@ -131,6 +148,11 @@ return {
             X: 0, Y: 15,
             HIDE_OBJECT: true,
         })
+
+        /*$.add(obj{ // End
+            OBJ_ID: 3600,
+            GROUPS: 10000g
+        })*/
 
         if lock_players { // lock players movement
             for pos in [[-30, 15], [30, 15], [0, -15], [0, 45]] {

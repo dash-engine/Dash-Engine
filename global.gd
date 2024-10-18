@@ -175,7 +175,7 @@ func deleteScene(uid):
 
 func get_next_group() -> int:
 	if last_used_group == -1:
-		last_used_group = 0
+		last_used_group = 1
 	else:
 		last_used_group += 1
 	

@@ -1,0 +1,103 @@
+// object key
+ok = (id: @number, pat: @pattern | @type_indicator, name: @string) {
+    return @object_key::{id, pattern: pat, name}
+}
+// id 2067 is scale trigger
+// id 2903 is gradient trigger
+// id 3600 is end trigger
+// id 1934 is song trigger
+// id 3602 is sfx trigger
+// id 3603 is edit sfx trigger
+// id 3604 is event trigger
+return {
+    SCALE_X: ok(128, @number, "SCALE_X"),
+    SCALE_Y: ok(129, @number, "SCALE_Y"),
+    PERSPECTIVE_X: ok(131, @number, "PERSPECTIVE_X"),
+    PERSPECTIVE_Y: ok(132, @number, "PERSPECTIVE_Y"),
+    // this doesnt work well with spwn 0.8, it thinks its a float not an array
+    P_GROUPS: ok(274, @array, "P_GROUPS"),
+    FOLLOW_CAMERA_X: ok(141, @bool, "FOLLOW_CAMERA_X"),
+    FOLLOW_CAMERA_Y: ok(142, @bool, "FOLLOW_CAMERA_Y"),
+    FOLLOW_CAMERA_X_MOD: ok(143, @number, "FOLLOW_CAMERA_X_MOD"),
+    FOLLOW_CAMERA_Y_MOD: ok(144, @number, "FOLLOW_CAMERA_Y_MOD"),
+    FOLLOW_P1: ok(215, @bool, "FOLLOW_P1"),
+    FOLLOW_P2: ok(216, @bool, "FOLLOW_P2"),
+    SCALE_X_BY: ok(150, @number, "SCALE_X_BY"),
+    SCALE_Y_BY: ok(151, @number, "SCALE_Y_BY"),
+    ADV_RAND_STRING: ok(152, @array, "ADV_RAND_STRING"),
+    DIV_BY_X: ok(153, @bool, "DIV_BY_X"),
+    DIV_BY_Y: ok(154, @bool, "DIV_BY_Y"),
+    ONLY_MOVE: ok(133, @bool, "ONLY_MOVE"),
+    // 0: both, 1: p1 only, 2: p2 only
+    PLAYER_ONLY: ok(198, @number, "PLAYER_ONLY"),
+    OVERRIDE_COUNT: ok(139, @bool, "OVERRIDE_COUNT"),
+    TARGET_2: ok(71, @group, "GROUP_2"),
+    CHANCE: ok(10, @number, "CHANCE"),
+    CAMERA_ZOOM: ok(109, @number, "CAMERA_ZOOM"),
+    FOLLOW_GROUP: ok(212, @group, "FOLLOW_GROUP"),
+    FOLLOW_EASING: ok(213, @number, "FOLLOW_EASING"),
+    CAMERA_EDGE: ok(164, @number, "CAMERA_EDGE"),
+    CHANGE_CHANNEL: ok(171, @bool, "CHANGE_CHANNEL"),
+    KEEP_VELOCITY: ok(169, @bool, "KEEP_VELOCITY"),
+    REVERSED: ok(118, @bool, "REVERSED"),
+    TIME_MOD: ok(120, @number, "TIME_MOD"),
+    FREE_MODE: ok(111, @bool, "FREE_MODE"),
+    EDIT_FREE_CAM_SETTINGS: ok(112, @number, "EDIT_FREE_CAM_SETTINGS"),
+    FREE_CAM_EASING: ok(113, @number, "FREE_CAM_EASING"),
+    FREE_CAM_PADDING: ok(114, @number, "FREE_CAM_PADDING"),
+    DISABLE_GRID_SNAP: ok(370, @bool, "DISABLE_GRID_SNAP"),
+    HIDE_OBJECT: ok(135, @bool, "HIDE_OBJECT"),
+
+    // these 8 values are `0 = default, -1 = false, 1 = true`
+    STREAK_ADDITIVE: ok(159, @number, "STREAK_ADDITIVE"),
+    UNLINK_DUAL_GRAVITY: ok(160, @number, "UNLINK_DUAL_GRAVITY"),
+    HIDE_GROUND: ok(161, @number, "HIDE_GROUND"),
+    HIDE_MG: ok(195, @number, "HIDE_MG"),
+    HIDE_P1: ok(162, @number, "HIDE_P1"),
+    HIDE_P2: ok(163, @number, "HIDE_P2"),
+    DISABLE_CONTROLS_P1: ok(165, @number, "DISABLE_CONTROLS_P1"),
+    DISABLE_CONTROLS_P2: ok(199, @number, "DISABLE_CONTROLS_P2"),
+
+    GRAVITY: ok(148, @number, "GRAVITY"),
+    PLAYER_1: ok(138, @number, "PLAYER_1"),
+    PLAYER_2: ok(200, @number, "PLAYER_2"),
+    _PT: ok(201, @number, "_PT"), // wtf is this
+    
+    // gradient stuff here
+    GR_LAYER: ok(202, @number, "GR_LAYER"),
+    GR_BL: ok(203, @group, "GR_BL"),
+    GR_BR: ok(204, @group, "GR_BR"),
+    GR_TL: ok(205, @group, "GR_TL"),
+    GR_TR: ok(206, @group, "GR_TR"),
+    GR_VERTEX_MODE: ok(207, @bool, "GR_VERTEX_MODE"),
+    GR_DISABLE: ok(208, @bool, "GR_DISABLE"),
+    GR_ID: ok(209, @number, "GR_ID"),
+    GR_PREV_OPACITY: ok(456, @number, "GR_PREV_OPACITY"),
+
+    // end trigger
+    END_NO_SFX: ok(461, @bool, "END_NO_SFX"),
+    END_NO_EFFECTS: ok(487, @bool, "END_NO_EFFECTS"),
+    END_INSTANT: ok(460, @bool, "END_INSTANT"),
+
+    // song+sfx trigger
+    SONG_SFX_ID: ok(392, @number, "SONG_SFX_ID"),
+    SONG_SFX_SPEED: ok(404, @number, "SONG_SFX_SPEED"),
+    SFX_PITCH: ok(405, @number, "SFX_PITCH"),
+    SONG_SFX_VOLUME: ok(406, @number, "SONG_SFX_VOLUME"),
+    SONG_SFX_START: ok(408, @number, "SONG_SFX_START"),
+    SONG_SFX_FADE_IN: ok(409, @number, "SONG_SFX_FADE_IN"),
+    SONG_SFX_END: ok(410, @number, "SONG_SFX_END"),
+    SONG_SFX_FADE_OUT: ok(411, @number, "SONG_SFX_FADE_OUT"),
+    SONG_CHANNEL: ok(432, @number, "SONG_CHANNEL"),
+    SONG_SFX_LOOP: ok(413, @bool, "SONG_SFX_LOOP"),
+    SONG_PREP: ok(399, @bool, "SONG_PREP"),
+    SONG_LOAD_PREP: ok(400, @bool, "SONG_LOAD_PREP"),
+    SONG_SFX_VOL_NEAR: ok(421, @number, "SONG_SFX_VOL_NEAR"),
+    SONG_SFX_VOL_MED: ok(422, @number, "SONG_SFX_VOL_MED"),
+
+    // event trigger
+    EVENT_EXTRA_ID: ok(447, @number, "EVENT_EXTRA_ID"),
+    EVENT_EXTRA_ID2: ok(525, @number, "EVENT_EXTRA_ID2"),
+    // "Arrays in object parameters can only contain groups" 💀
+    EVENT_LIST: ok(430, @array|@string|@number, "EVENT_LIST"),
+}
