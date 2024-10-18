@@ -8,10 +8,11 @@ extract import "obj_props_2_2.spwn"
 let coreVersion = "0.0.1";
 let currentScene = 0;
 let scenes = 0;
+let endTriggerGroup = 9998g;
 
 // Function to create text objects
-create_text = (text, txt_x, txt_y, group = 0g) {
-    return $.add(text.to_obj().with(X, txt_x).with(Y, txt_y).with(SCALING, 0.6).with(obj_props.GROUPS,group));
+create_text = (text, txt_x, txt_y, group = 0g, size = 1) {
+    return $.add(text.to_obj().with(X, txt_x).with(Y, txt_y).with(SCALING, size).with(obj_props.GROUPS,group));
 };
 
 // Function to count scenes
@@ -37,7 +38,8 @@ change_scene = (sceneID) {
 };
 
 endLevel = (){
-    //trigger(10000g)
+    endTriggerGroup.toggle_on();
+    $.print("Level ended!")
 }
 
 playSound = (sound_id = 1, speed = 1, pitch = 1, loop = false){
@@ -51,11 +53,11 @@ playSound = (sound_id = 1, speed = 1, pitch = 1, loop = false){
 };
 
 showWatermark = (){
-create_text("Made with Geometry Dash Game Engine", -50, 2000+500);
-create_text("Github: github.com/dash-engine/Dash-Engine", -50, 1960+500);
+create_text("Made with Geometry Dash Game Engine", -50, 2000+500,0g,0.6);
+create_text("Github: github.com/dash-engine/Dash-Engine", -50, 1960+500,0g,0.6);
 // Core version text
-create_text("Using core ver:", -50, 1940+500);
-create_text(coreVersion,80,1940+500);
+create_text("Using core ver:", -50, 1940+500,0g,0.6);
+create_text(coreVersion,80,1940+500,0g,0.6);
 }
 
 /* 2.2 Gamescene, Thanks to: github.com/itsmebombie/gamescene-2.2/tree/main */
@@ -148,12 +150,14 @@ return {
             X: 0, Y: 15,
             HIDE_OBJECT: true,
         })
-
-        /*$.add(obj{ // End
+        $.add(obj{ // End
             OBJ_ID: 3600,
-            GROUPS: 10000g
-        })*/
-
+            GROUPS: endTriggerGroup,
+            TOUCH_TRIGGERED: true,
+            SCALING: 50,
+            HIDE_OBJECT: true,
+        })
+        endTriggerGroup.toggle_off()
         if lock_players { // lock players movement
             for pos in [[-30, 15], [30, 15], [0, -15], [0, 45]] {
                 $.add(obj{

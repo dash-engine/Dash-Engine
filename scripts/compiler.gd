@@ -25,6 +25,7 @@ func compile():
 					"""
 
 	var scenesLibCode = """
+					let currentScene = counter(0g)
 					let camera = import "camera_triggers.spwn";
 					exitCamera = (camGroup){
 						camera.static_camera(camGroup, exit_static=true, instant_exit=true);
