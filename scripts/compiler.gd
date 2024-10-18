@@ -65,7 +65,7 @@ func compile():
 		for object_id in Global.project["objects"]:
 			var object = Global.project["objects"][object_id]
 			var uid = object["uid"]
-			var pos = object["position"]
+			var pos = Global.stringToVector2(object["position"])
 			var rotation = object.get("rotation", 0.0)
 			var type = object["type"]
 			var objectGroup = object["group"]

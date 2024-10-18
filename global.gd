@@ -172,8 +172,12 @@ func loadProjFile(Path):
 		var newObj = mainScene.add_object(true)
 		newObj.uid = object["uid"]
 		newObj.Name = object["name"]
+		##
+		newObj.Position = stringToVector2(object["position"])
+		newObj.Rotation = object["rotation"]
 		newObj.position = stringToVector2(object["position"])
 		newObj.rotation = object["rotation"]
+		##
 		newObj.type = object["type"]
 		newObj.group = object["group"]
 	project = Dictionary(projectData)
@@ -206,10 +210,11 @@ func get_next_group() -> int:
 	
 	return last_used_group
 
-func stringToVector2(coords: String) -> Vector2:
+func stringToVector2(coords) -> Vector2:
+	coords = str(coords)
 	coords = coords.replace("(", "").replace(")", "")
 	
-	var coordinates := coords.split(",")
+	var coordinates = coords.split(",")
 	var x := int(coordinates[0])
 	var y := int(coordinates[1])
 	
