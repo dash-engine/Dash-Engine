@@ -28,6 +28,8 @@ var current_selected_object = null
 var output = ""
 var outputRef = null
 
+var mainScene = null
+
 var projectName = "test"
 var levelName = "test"
 
@@ -36,6 +38,7 @@ var currentScene = ""
 var last_used_group = -1
 
 func _ready() -> void:
+	mainScene = get_tree().root.get_node("main")
 	checkForSpwn()
 	saveScene(UID.generate(),"main",sceneGroup)
 
@@ -112,7 +115,7 @@ func createFile():
 		saveFile(UID.generate(),Name,"")
 
 func get_string(question = ""):
-	var clone = await get_tree().root.get_node("main").get_string() #load("res://scenes/getString.tscn").instantiate()
+	var clone = await mainScene.get_string() #load("res://scenes/getString.tscn").instantiate()
 	return clone
 	clone.question = question
 	#get_tree().root.add_child(clone)
@@ -154,7 +157,26 @@ func loadProject(projectName):
 	fileDialog.file_selected.connect(loadProjFile)
 
 func loadProjFile(Path):
-	var projectData = Data.load_data(Path)
+	var json = JSON.new()
+	var projectData = json.parse(Data.load_data(Path))
+	if projectData == OK:
+		projectData = json.get_data()
+	else:
+		return
+	
+	for object in objectConainer.get_children():
+		object.queue_free()
+	
+	for object in projectData["objects"]:
+		object = projectData["objects"][object]
+		var newObj = mainScene.add_object(true)
+		newObj.uid = object["uid"]
+		newObj.Name = object["name"]
+		newObj.position = stringToVector2(object["position"])
+		newObj.rotation = object["rotation"]
+		newObj.type = object["type"]
+		newObj.group = object["group"]
+	project = Dictionary(projectData)
 
 func deleteObject(uid):
 	if uid in project["objects"]:
@@ -183,3 +205,13 @@ func get_next_group() -> int:
 		project["groups"].append(last_used_group)
 	
 	return last_used_group
+
+func stringToVector2(coords: String) -> Vector2:
+	coords = coords.replace("(", "").replace(")", "")
+	
+	var coordinates := coords.split(",")
+	var x := int(coordinates[0])
+	var y := int(coordinates[1])
+	
+	var vector2 := Vector2(x, y)
+	return vector2

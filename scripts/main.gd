@@ -12,10 +12,12 @@ func _on_canvas_gui_input(event: InputEvent) -> void:
 func _on_button_pressed() -> void:
 	add_object()
 
-func add_object():
+func add_object(custom_object = false):
 	var object = load("res://object.tscn")
 	var clone = object.instantiate()
+	clone.initializate = !custom_object
 	canvas.add_child(clone)
+	return clone
 
 func _on_compile_pressed() -> void:
 	var clone = load("res://compiler.tscn").instantiate()

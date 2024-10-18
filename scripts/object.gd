@@ -20,17 +20,20 @@ const GRID_SIZE = 8
 
 @export var group = -1
 
+@export var initializate = false
+
 var alrPressed = false
 var pressedDebounce = false
 
 @onready var oldType = type
 
 func _ready() -> void:
-	uid = UID.generate()
-	Global.saveObject(uid, Name, Position, type, Rotation, Global.currentScene)
-	Global.saveScript(uid, "")
+	if initializate:
+		uid = UID.generate()
+		Global.saveObject(uid, Name, Position, type, Rotation, Global.currentScene)
+		Global.saveScript(uid, "")
+		group = Global.project["objects"][uid]["group"]
 	name = uid
-	group = Global.project["objects"][uid]["group"]
 	if canvas == null:
 		if get_parent():
 			if get_parent().is_class("Control"):
