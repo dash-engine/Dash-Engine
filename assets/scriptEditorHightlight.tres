@@ -4,7 +4,7 @@
 number_color = Color(7.21961e-07, 0.649515, 0.3863, 1)
 symbol_color = Color(0.721537, 0.869484, 1, 1)
 function_color = Color(1, 0.696979, 0.671866, 1)
-member_variable_color = Color(0.404511, 0.404511, 0.404511, 1)
+member_variable_color = Color(0, 0.522023, 0.932171, 1)
 keyword_colors = {
 "and": Color(0.976471, 0.14902, 0.447059, 1),
 "assert": Color(0.8, 0.2, 0.2, 1),
