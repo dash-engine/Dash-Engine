@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://daiub6sm53t7k"
-path="res://.godot/imported/the-confusing-one.png-e00b660cbcfdd75583ef7bc4712f5912.ctex"
+uid="uid://unb7dklq8mr8"
+path="res://.godot/imported/collider.png-9f331b47047f9340a162ac1f4f82656c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/obj/the-confusing-one.png"
-dest_files=["res://.godot/imported/the-confusing-one.png-e00b660cbcfdd75583ef7bc4712f5912.ctex"]
+source_file="res://assets/sprites/collider.png"
+dest_files=["res://.godot/imported/collider.png-9f331b47047f9340a162ac1f4f82656c.ctex"]
 
 [params]
 

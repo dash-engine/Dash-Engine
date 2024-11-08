@@ -3,7 +3,11 @@ extends Node
 var dir = "user://temp"
 var temp = 1
 
+@export var compiling_song : AudioStreamPlayer2D
+@export var compiled_sound : AudioStreamPlayer2D
+
 func compile():
+	compiling_song.play()
 	temp += 1
 	Global.resetOutput()
 	await Global.wait(0.5)
@@ -114,7 +118,9 @@ func compile():
 	final_script += main_script
 	create_spwn("main", final_script)
 	create_spwn("scenes", scenesLibCode)
-	compileCommand()
+	await compileCommand()
+	compiling_song.stop()
+	compiled_sound.play()
 	Global.addToOutput("-- End compiling --", true)
 
 func _ready() -> void:
@@ -135,13 +141,12 @@ func compileCommand():
 	var arguments = ["build", '"'+OS.get_user_data_dir()+"/temp/"+filename+'"', "--level-name", '"%s"' % Global.levelName]
 	print('"'+OS.get_user_data_dir()+"/temp/"+filename+'"')
 	var output = []
-	var error_code = OS.execute(command, arguments, output, true, true)
+	var error_code = await OS.execute(command, arguments, output, true, false)
 	
 	Global.addToOutput(ansi_parser.parse(output[0]))
 	
 	if error_code != OK:
 		print("exit with error: ", error_code)
-		print("Output: ", output[0])
 
 func file_exist(fileName):
 	var dir = DirAccess.open("user://")

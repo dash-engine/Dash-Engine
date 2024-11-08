@@ -9,10 +9,13 @@ let coreVersion = "0.0.1";
 let currentScene = 0;
 let scenes = 0;
 let endTriggerGroup = 9998g;
+let alreadyInit = counter(false);
+
+let splashFadeOutTime = 4
 
 // Function to create text objects
-create_text = (text, txt_x, txt_y, group = 0g, size = 1) {
-    return $.add(text.to_obj().with(X, txt_x).with(Y, txt_y).with(SCALING, size).with(obj_props.GROUPS,group));
+create_text = (text, txt_x, txt_y, group = 0g, size = 1, clr = 0c) {
+    return $.add(text.to_obj().with(X, txt_x).with(Y, txt_y).with(SCALING, size).with(obj_props.GROUPS,group).with(COLOR,clr));
 };
 
 // Function to count scenes
@@ -52,12 +55,32 @@ playSound = (sound_id = 1, speed = 1, pitch = 1, loop = false){
     });
 };
 
+warn = (text = "", canIgnoreText = false){
+    let warnTxt = "WARNING! " + text
+    if canIgnoreText{
+        warnTxt = warnTxt + " This can be ignored."
+    }
+    $.print(text)
+}
+
+/*showSplash = (){
+    $.print("Show splash")
+    let position = {x:296,y:196}
+    let textGroup = 8888g
+    let alphaGroup = 8889g
+
+    create_text("Made with Dash Engine",position.x,position.y,textGroup,0.6)
+
+    $.add(alpha_trigger(textGroup,0,duration = splashFadeOutTime/3).with(obj_props.X,100))
+}*/
+
 showWatermark = (){
-create_text("Made with Geometry Dash Game Engine", -50, 2000+500,0g,0.6);
-create_text("Github: github.com/dash-engine/Dash-Engine", -50, 1960+500,0g,0.6);
-// Core version text
-create_text("Using core ver:", -50, 1940+500,0g,0.6);
-create_text(coreVersion,80,1940+500,0g,0.6);
+    $.print("Show watermark")
+    create_text("Made with Geometry Dash Game Engine", -50, 2000+500,0g,0.6);
+    create_text("Github: github.com/dash-engine/Dash-Engine", -50, 1960+500,0g,0.6);
+    // Core version text
+    create_text("Using core ver:", -50, 1940+500,0g,0.6);
+    create_text(coreVersion,80,1940+500,0g,0.6);
 }
 
 /* 2.2 Gamescene, Thanks to: github.com/itsmebombie/gamescene-2.2/tree/main */
@@ -95,6 +118,63 @@ p = @trigger_function|@group
 
 // add
 add = (b,g) => b.with(TARGET, g.start_group if g.type == @trigger_function else g).add()
+
+init = (hide_players: @bool = true, disable_death_sfx: @bool = true, lock_players: @bool = true, hide_attempts: @bool = true) {
+    if alreadyInit == counter(true) {
+        warn("You can't init the game twice!");
+        return;
+    }
+    
+    plr = hide_players
+
+    alreadyInit = counter(true)
+
+    hide_player()
+
+    $.add(obj{ // options
+        OBJ_ID: 2899,
+        X: -30, Y: 0,
+        HIDE_P1: plr, HIDE_P2: plr,
+        NO_DEATH_SFX: disable_death_sfx,
+        HIDE_ATTEMPTS: hide_attempts,
+    })
+
+    $.add(obj{ // no enter/exit effects
+        OBJ_ID: 1915,
+        X: -30, Y: 30,
+    })
+
+    $.add(obj{ // dual mode portal w/ free cam
+        OBJ_ID: 286,
+        X: 0, Y: 15,
+        HIDE_OBJECT: true,
+        FREE_MODE: true
+    })
+
+    $.add(obj{ // gravity portal
+        OBJ_ID: 10,
+        X: 0, Y: 15,
+        HIDE_OBJECT: true,
+    })
+        $.add(obj{ // End
+        OBJ_ID: 3600,
+        GROUPS: endTriggerGroup,
+        TOUCH_TRIGGERED: true,
+        SCALING: 50,
+        HIDE_OBJECT: true,
+    })
+    endTriggerGroup.toggle_off()
+    if lock_players { // lock players movement
+        for pos in [[-30, 15], [30, 15], [0, -15], [0, 45]] {
+            $.add(obj{
+                OBJ_ID: 1,
+                X: pos[0], Y: pos[1],
+                HIDE_OBJECT: true,
+            })
+        }
+    }
+}
+
 /*-------------------------------------------------*/
 
 return {
@@ -122,50 +202,5 @@ return {
     button_a_right_end: (g: p) => add(p1(ev_rup), g),
     button_b_left_end: (g: p) => add(p2(ev_lup), g),
     button_b_right_end: (g: p) => add(p2(ev_rup), g),
-
-    init: (hide_players: @bool = true, disable_death_sfx: @bool = true, lock_players: @bool = true, hide_attempts: @bool = true) {
-        plr = hide_players
-        $.add(obj{ // options
-            OBJ_ID: 2899,
-            X: -30, Y: 0,
-            HIDE_P1: plr, HIDE_P2: plr,
-            NO_DEATH_SFX: disable_death_sfx,
-            HIDE_ATTEMPTS: hide_attempts,
-        })
-
-        $.add(obj{ // no enter/exit effects
-            OBJ_ID: 1915,
-            X: -30, Y: 30,
-        })
-
-        $.add(obj{ // dual mode portal w/ free cam
-            OBJ_ID: 286,
-            X: 0, Y: 15,
-            HIDE_OBJECT: true,
-            FREE_MODE: true
-        })
-
-        $.add(obj{ // gravity portal
-            OBJ_ID: 10,
-            X: 0, Y: 15,
-            HIDE_OBJECT: true,
-        })
-        $.add(obj{ // End
-            OBJ_ID: 3600,
-            GROUPS: endTriggerGroup,
-            TOUCH_TRIGGERED: true,
-            SCALING: 50,
-            HIDE_OBJECT: true,
-        })
-        endTriggerGroup.toggle_off()
-        if lock_players { // lock players movement
-            for pos in [[-30, 15], [30, 15], [0, -15], [0, 45]] {
-                $.add(obj{
-                    OBJ_ID: 1,
-                    X: pos[0], Y: pos[1],
-                    HIDE_OBJECT: true,
-                })
-            }
-        }
-    },
+    init: init,
 }

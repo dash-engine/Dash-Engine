@@ -12,10 +12,11 @@ func _on_canvas_gui_input(event: InputEvent) -> void:
 func _on_button_pressed() -> void:
 	add_object()
 
-func add_object(custom_object = false):
+func add_object(custom_object = false, collider = false):
 	var object = load("res://object.tscn")
 	var clone = object.instantiate()
 	clone.initializate = !custom_object
+	clone.collider = collider
 	canvas.add_child(clone)
 	return clone
 
@@ -42,3 +43,6 @@ func get_string(question = ""):
 	print(clone.accepted)
 	clone.queue_free()
 	return clone.response
+
+func _on_add_collider_pressed() -> void:
+	add_object(false,true)

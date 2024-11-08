@@ -20,6 +20,8 @@ const GRID_SIZE = 8
 
 @export var group = -1
 
+@export var collider = false
+
 @export var initializate = false
 
 var alrPressed = false
@@ -29,6 +31,8 @@ var pressedDebounce = false
 
 func _ready() -> void:
 	if initializate:
+		if collider:
+			type = 1816
 		uid = UID.generate()
 		Global.saveObject(uid, Name, Position, type, Rotation, Global.currentScene)
 		Global.saveScript(uid, "")
@@ -39,6 +43,8 @@ func _ready() -> void:
 			if get_parent().is_class("Control"):
 				canvas = get_parent()
 	canvas_rect = Rect2(canvas.position - Vector2(146, 32), canvas.size)
+	if collider:
+		Sprite.texture = load("res://assets/sprites/collider.png")
 
 func pressed():
 	if pressedDebounce == false:
@@ -81,6 +87,8 @@ func _process(delta):
 		pressed()
 
 func getSprite():
+	if collider:
+		return
 	var spritesFolder = "res://assets/sprites/obj/"
 	var objSprite = spritesFolder + Objects.get_object_name(Objects.get_index_by_id(type)) + ".png"
 	Sprite.texture = load(objSprite)

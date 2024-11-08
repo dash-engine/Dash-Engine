@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://cslxs587d02kj"]
+[gd_scene load_steps=4 format=3 uid="uid://cslxs587d02kj"]
 
 [ext_resource type="Script" path="res://scripts/compiler.gd" id="1_4vp52"]
+[ext_resource type="AudioStream" uid="uid://ddlxigoslc1j3" path="res://assets/sounds/compiling.wav" id="2_udwbm"]
+[ext_resource type="AudioStream" uid="uid://1aw4kfkicldg" path="res://assets/sounds/achievement_01.ogg" id="3_sy5m7"]
 
-[node name="compiler" type="Control"]
+[node name="compiler" type="Control" node_paths=PackedStringArray("compiling_song", "compiled_sound")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,3 +12,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_4vp52")
+compiling_song = NodePath("Compiling")
+compiled_sound = NodePath("Achievement01")
+
+[node name="Compiling" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_udwbm")
+volume_db = -80.0
+
+[node name="Achievement01" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_sy5m7")
