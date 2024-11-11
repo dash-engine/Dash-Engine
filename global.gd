@@ -12,9 +12,9 @@ return {
 	"objects": {},
 	"scenes": {},
 	"files": {},
-	"groups": []
+	"groups": [],
+	"currenScene": "",
 }
-
 
 const sceneGroup = 1001
 const maxScenes = 1000
@@ -40,6 +40,7 @@ var last_used_group = -1
 func _ready() -> void:
 	mainScene = get_tree().root.get_node("main")
 	checkForSpwn()
+	saveScene(UID.generate(),"splash",sceneGroup)
 	saveScene(UID.generate(),"main",sceneGroup)
 
 func checkForSpwn():
@@ -91,16 +92,33 @@ func saveObject(uid, Name, position, type, rotation, sceneUID, group = -1):
 
 func saveScene(uid, Name, group = -1):
 	if group == -1:
-		group == randi_range(sceneGroup,sceneGroup+maxScenes)
+		group = randi_range(sceneGroup,sceneGroup+maxScenes)
 		for scene in project["scenes"]:
-			if group == project["scenes"][scene]["group"]:
-				group == randi_range(sceneGroup,sceneGroup+maxScenes)
-	
+			if group == project["scenes"][scene]["group"] or group == -1:
+				group = randi_range(sceneGroup,sceneGroup+maxScenes)
 	project["scenes"][uid] = {
 		"uid": uid,
 		"name": Name,
 		"group": group,
 	}
+
+func changeToScene(uid):
+	if uid == "": return
+	currentScene = uid
+	refreshObjects()
+	DisplayServer.window_set_title(project["scenes"][uid]["name"]+" - Dash engine")
+	print(project["objects"])
+	for object in project["objects"]:
+		var obj = project["objects"][object]
+		if obj["sceneUID"] == uid:
+			var newObj = mainScene.add_object(true)
+			newObj.uid = obj["uid"]
+			newObj.Name = obj["name"]
+			newObj.Position = stringToVector2(obj["position"])
+			newObj.Rotation = obj["rotation"]
+			newObj.type = obj["type"]
+			newObj.group = obj["group"]
+			newObj.position = stringToVector2(obj["position"])
 
 func createFile():
 	var Name = await get_string("File name")
@@ -139,6 +157,7 @@ func wait(sec):
 	return await get_tree().create_timer(sec).timeout
 
 func saveProject():
+	project["currentScene"] = currentScene
 	var projectJson = convertProjectToJson()
 	if !Data.file_exist("projects"):
 		DirAccess.make_dir_absolute("user://projects")
@@ -164,8 +183,9 @@ func loadProjFile(Path):
 	else:
 		return
 	
-	for object in objectConainer.get_children():
-		object.queue_free()
+	project = Dictionary(projectData)
+	
+	refreshObjects()
 	
 	for object in projectData["objects"]:
 		object = projectData["objects"][object]
@@ -180,7 +200,9 @@ func loadProjFile(Path):
 		##
 		newObj.type = object["type"]
 		newObj.group = object["group"]
-	project = Dictionary(projectData)
+	for scene in projectData["scenes"]:
+		scene = projectData["scenes"][scene]
+	changeToScene(project["currentScene"])
 
 func deleteObject(uid):
 	if uid in project["objects"]:
@@ -220,3 +242,9 @@ func stringToVector2(coords) -> Vector2:
 	
 	var vector2 := Vector2(x, y)
 	return vector2
+
+func refreshObjects():
+	Global.current_selected_object = null
+	for object in objectConainer.get_children():
+		objectConainer.remove_child(object)
+		object.queue_free()

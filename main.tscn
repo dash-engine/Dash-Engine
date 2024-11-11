@@ -172,7 +172,6 @@ width = 3.0
 default_color = Color(0.691357, 0.691357, 0.691357, 1)
 
 [node name="fileManager" type="ItemList" parent="." node_paths=PackedStringArray("context_menu")]
-visible = false
 layout_mode = 0
 offset_top = 532.0
 offset_right = 1152.0
@@ -185,12 +184,6 @@ context_menu = NodePath("PopupMenu")
 
 [node name="PopupMenu" type="PopupMenu" parent="fileManager"]
 size = Vector2i(134, 100)
-item_count = 3
-item_0/text = "Create text file"
-item_1/text = "Create scene"
-item_1/id = 1
-item_2/text = "rename"
-item_2/id = 2
 
 [connection signal="pressed" from="addObj" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="addCollider" to="." method="_on_add_collider_pressed"]

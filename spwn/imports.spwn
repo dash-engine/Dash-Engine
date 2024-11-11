@@ -4,7 +4,6 @@ let game = import "core.spwn";
 let new_counter = import "new_counter.spwn";
 let random = import "rand.spwn";
 let camera = import "camera_triggers.spwn";
-let Scene = import "scenes.spwn";
 
 return {
     Global: Global,
@@ -12,5 +11,4 @@ return {
     new_counter: new_counter,
     rand: random,
     camera: camera,
-    Scene: Scene,
 };

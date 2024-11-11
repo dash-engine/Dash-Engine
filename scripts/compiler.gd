@@ -6,6 +6,8 @@ var temp = 1
 @export var compiling_song : AudioStreamPlayer2D
 @export var compiled_sound : AudioStreamPlayer2D
 
+var sceneSeparation = 500
+
 func compile():
 	compiling_song.play()
 	temp += 1
@@ -19,6 +21,7 @@ func compile():
 	duplicateCoreFiles()
 	
 	var objectsPos = {}
+	var added_uids = {}
 	
 	var main_script = """
 					extract obj_props;
@@ -29,31 +32,32 @@ func compile():
 					"""
 
 	var scenesLibCode = """
-					let camera = import "camera_triggers.spwn";
-					exitCamera = (camGroup){
-						camera.static_camera(camGroup, exit_static=true, instant_exit=true);
-					};
-					return{
-						exitCamera:exitCamera
-					};
-					""" % [Global.sceneGroup, Global.maxScenes + Global.sceneGroup]
+		let scenes = {
+		"""
 
 	var sceneCenterX = 200
-	var sceneCenterY = 200
+	var sceneCenterY = 500
 	var currentCamGroup = 0
 	var mainCamGroup = Global.camGroup
-	
 	
 	main_script += """
 		camera.static_camera(%sg, duration=0);
 	""" % mainCamGroup
 
 	for scene in Global.project["scenes"]:
+		scene = Global.project["scenes"][scene]
 		currentCamGroup += 1
-		var centerX = sceneCenterX
+		var centerX = sceneCenterX + (currentCamGroup * sceneSeparation)
 		var centerY = sceneCenterY
 		var sceneCamGroup = Global.camGroup + currentCamGroup
-
+		
+		var currentSceneID = scene["group"]
+		var currentSceneNAME = scene["name"]
+		
+		scenesLibCode += """
+		'%s':%sg,
+		""" % [currentSceneNAME, currentSceneID]
+		
 		main_script += """
 			$.add(obj {
 				OBJ_ID: 60,
@@ -65,17 +69,23 @@ func compile():
 			%sg.alpha(0);
 			camera.static_camera(%sg, duration=0);
 		""" % [centerX, centerY, sceneCamGroup, sceneCamGroup, sceneCamGroup]
-
+		
 		for object_id in Global.project["objects"]:
 			var object = Global.project["objects"][object_id]
 			var uid = object["uid"]
+			if uid in added_uids:
+				continue
+			added_uids[uid] = true
+			
+			print("Adding object to main_script | UID", uid)
+			
 			var pos = Global.stringToVector2(object["position"])
 			var rotation = object.get("rotation", 0.0)
 			var type = object["type"]
 			var objectGroup = object["group"]
-			var centeredX = (centerX + pos.x)/2
-			var centeredY = (centerY + pos.y)/2
-			objectsPos[uid] = {"x": centeredX,"y":centeredY}
+			var centeredX = (centerX + pos.x) * 2
+			var centeredY = (centerY + pos.y) * 2
+			objectsPos[uid] = {"x": centeredX, "y": centeredY}
 			main_script += """
 			/* Object: %s */
 			$.add(obj {
@@ -86,8 +96,8 @@ func compile():
 				GROUPS: [%sg, %sg, %sg]
 			});
 			object_%s.execute();
-			""" % [uid, type, centeredX, centeredY, rotation, Global.sceneGroup, Global.sceneGroup + current_scene, objectGroup, uid.replace("-", "_")]
-
+			""" % [uid, type, centeredX, centeredY, rotation, Global.sceneGroup, currentSceneID, objectGroup, uid.replace("-", "_")]
+	
 	for object_id in Global.project["objects"]:
 		var object = Global.project["objects"][object_id]
 		var uid = object["uid"]
@@ -98,26 +108,35 @@ func compile():
 		var code = """
 					extract obj_props;
 					extract import "imports.spwn";
-					let position = {x:%s,y:%s}
+					let position = {x:%s, y:%s}
 					let rotation = %s
 					let this = %sg
-					execute = (){
+					set_transparency = (transparency) {
+						this.alpha(transparency)
+					}
+					execute = () {
+					// Init game
+					Game.init()
 					/* Object script */
 					%s
 					};
 					return {execute: execute};
-		""" % [position.x,position.y,rotation,group,script]
+		""" % [position.x, position.y, rotation, group, script]
 		objects_path.append(create_spwn("object_" + uid.replace("-", "_"), code))
 	
 	var final_script = ""
-	
 	for file in objects_path:
 		final_script += """
 		let %s = import "%s";\n
 		""" % [file.replace(".spwn", ""), file]
+	
 	final_script += main_script
 	create_spwn("main", final_script)
+	
+	scenesLibCode += """}
+	return {scenes: scenes}"""
 	create_spwn("scenes", scenesLibCode)
+	
 	await compileCommand()
 	compiling_song.stop()
 	compiled_sound.play()

@@ -4,11 +4,15 @@
 extract obj_props;
 extract import "obj_props_2_2.spwn"
 
+let camera = import "camera_triggers.spwn";
+let scenesLib = import "scenes.spwn";
+
 // Variables
 let coreVersion = "0.0.1";
 let currentScene = 0;
 let scenes = 0;
 let endTriggerGroup = 9998g;
+
 
 // Function to create text objects
 create_text = (text, txt_x, txt_y, group = 0g, size = 1) {
@@ -19,22 +23,32 @@ create_text = (text, txt_x, txt_y, group = 0g, size = 1) {
 countScene = () {
     scenes += 1;
 };
+exitCamera = (camGroup){
+    camera.static_camera(camGroup, exit_static=true, instant_exit=true);
+};
 
 // Function to change the current scene
-change_scene = (sceneID) {
+change_scene = (sceneName) {
     // Hide all scenes
-    let groupModifying = 800g;
+    let firstGroupNumber = 1001;
+    let maxScenes = 1000;
+
+    let sceneGroups = []
+    
+    for i in 1001g..2001g{
+        sceneGroups.push(i)
+    }
+
     let i = 0;
 
     while (i <= scenes) {
+        let groupModifying = sceneGroups[i];
         groupModifying.alpha(0);
-        groupModifying++;
         i++;
     }
 
-    let sceneGroup = 800g + sceneID;
-    sceneGroup.alpha(1);
-    currentScene = sceneID;
+    let currentSceneGroup = scenesLib.scenes[sceneName]
+    currentSceneGroup.alpha(1)
 };
 
 endLevel = (){
@@ -53,7 +67,7 @@ playSound = (sound_id = 1, speed = 1, pitch = 1, loop = false){
 };
 
 showWatermark = (){
-create_text("Made with Geometry Dash Game Engine", -50, 2000+500,0g,0.6);
+create_text("Made with Dash Game Engine", -50, 2000+500,0g,0.6);
 create_text("Github: github.com/dash-engine/Dash-Engine", -50, 1960+500,0g,0.6);
 // Core version text
 create_text("Using core ver:", -50, 1940+500,0g,0.6);
@@ -104,6 +118,7 @@ return {
     showWatermark: showWatermark,
     playSound: playSound,
     endLevel: endLevel,
+    exitCamera:exitCamera,
     /*         GAMESCENE            */
     // g = group or trigger function, p = pattern
     button: (g: p) => add(ev_down, g),
@@ -155,7 +170,6 @@ return {
             GROUPS: endTriggerGroup,
             TOUCH_TRIGGERED: true,
             SCALING: 50,
-            HIDE_OBJECT: true,
         })
         endTriggerGroup.toggle_off()
         if lock_players { // lock players movement
