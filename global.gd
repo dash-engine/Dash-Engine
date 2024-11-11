@@ -18,8 +18,11 @@ return {
 
 const sceneGroup = 1001
 const maxScenes = 1000
-const maxObjects = 1000
-const camGroup = 6000
+
+const objectGroup = 4000
+const maxObjects = 2000
+
+const camGroup = 6001
 
 var objectConainer = null
 
@@ -41,7 +44,7 @@ func _ready() -> void:
 	mainScene = get_tree().root.get_node("main")
 	checkForSpwn()
 	saveScene(UID.generate(),"splash",sceneGroup)
-	saveScene(UID.generate(),"main",sceneGroup)
+	saveScene(UID.generate(),"main",sceneGroup+1)
 
 func checkForSpwn():
 	var spwnoutput = []
@@ -223,7 +226,7 @@ func deleteScene(uid):
 
 func get_next_group() -> int:
 	if last_used_group == -1:
-		last_used_group = 1
+		last_used_group = objectGroup
 	else:
 		last_used_group += 1
 	

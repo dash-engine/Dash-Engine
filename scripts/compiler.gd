@@ -51,12 +51,12 @@ func compile():
 		var centerY = sceneCenterY
 		var sceneCamGroup = Global.camGroup + currentCamGroup
 		
-		var currentSceneID = scene["group"]
+		var currentSceneGroup = scene["group"]
 		var currentSceneNAME = scene["name"]
 		
 		scenesLibCode += """
 		'%s':%sg,
-		""" % [currentSceneNAME, currentSceneID]
+		""" % [currentSceneNAME, currentSceneGroup]
 		
 		main_script += """
 			$.add(obj {
@@ -96,7 +96,7 @@ func compile():
 				GROUPS: [%sg, %sg, %sg]
 			});
 			object_%s.execute();
-			""" % [uid, type, centeredX, centeredY, rotation, Global.sceneGroup, currentSceneID, objectGroup, uid.replace("-", "_")]
+			""" % [uid, type, centeredX, centeredY, rotation, Global.sceneGroup, currentSceneGroup, objectGroup, uid.replace("-", "_")]
 	
 	for object_id in Global.project["objects"]:
 		var object = Global.project["objects"][object_id]
