@@ -29,6 +29,8 @@ func compile():
 					// GENERATED WITH GEOMETRY DASH GAME ENGINE
 					let engineVersion = "1.0";
 					Game.showWatermark();
+					// Init game
+					Game.init()
 					"""
 
 	var scenesLibCode = """
@@ -50,6 +52,7 @@ func compile():
 		var centerX = sceneCenterX + (currentCamGroup * sceneSeparation)
 		var centerY = sceneCenterY
 		var sceneCamGroup = Global.camGroup + currentCamGroup
+		var sceneUID = scene["uid"]
 		
 		var currentSceneGroup = scene["group"]
 		var currentSceneNAME = scene["name"]
@@ -72,6 +75,8 @@ func compile():
 		
 		for object_id in Global.project["objects"]:
 			var object = Global.project["objects"][object_id]
+			if object["sceneUID"] != sceneUID:
+				continue
 			var uid = object["uid"]
 			if uid in added_uids:
 				continue
@@ -83,8 +88,10 @@ func compile():
 			var rotation = object.get("rotation", 0.0)
 			var type = object["type"]
 			var objectGroup = object["group"]
-			var centeredX = (centerX + pos.x) * 2
-			var centeredY = (centerY + pos.y) * 2
+			
+			var centeredX = (centerX + pos.x)/1.5
+			var centeredY = (centerY + pos.y)/1.5
+			
 			objectsPos[uid] = {"x": centeredX, "y": centeredY}
 			main_script += """
 			/* Object: %s */
@@ -115,8 +122,6 @@ func compile():
 						this.alpha(transparency)
 					}
 					execute = () {
-					// Init game
-					Game.init()
 					/* Object script */
 					%s
 					};

@@ -95,7 +95,7 @@ offset_top = 359.0
 offset_right = 1152.0
 offset_bottom = 390.0
 theme = ExtResource("2_b2s04")
-text = "Edit script"
+text = "Edit runtime script"
 
 [node name="delete" type="Button" parent="properties"]
 layout_mode = 0
