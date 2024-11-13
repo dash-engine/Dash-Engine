@@ -1,6 +1,7 @@
 [gd_resource type="Theme" format=3 uid="uid://dlrca21g6xugd"]
 
 [resource]
+default_font_size = 0
 Button/styles/disabled = null
 Button/styles/focus = null
 Button/styles/hover = null

@@ -9,6 +9,7 @@ return {
 	example_variable: example_variable,
 	example_function: example_function
 }"""},
+	"compilingTimeScripts": {},
 	"objects": {},
 	"scenes": {},
 	"files": {},
@@ -43,8 +44,23 @@ var last_used_group = -1
 func _ready() -> void:
 	mainScene = get_tree().root.get_node("main")
 	checkForSpwn()
-	saveScene(UID.generate(),"splash",sceneGroup)
-	saveScene(UID.generate(),"main",sceneGroup+1)
+	var splashSceneUID = UID.generate()
+	var mainSceneUID = UID.generate()
+	saveScene(splashSceneUID,"splash",sceneGroup)
+	saveScene(mainSceneUID,"main",sceneGroup+1)
+	
+	var splashObjUID = UID.generate()
+	saveObject(splashObjUID,"Splash", Vector2(400,200), 1, 0, splashSceneUID)
+	saveScript(splashObjUID, """set_transparency(0)
+
+Game.create_text("Made with dash engine",position.x,position.y,0g,1)
+
+wait(6)
+
+Game.change_scene("main")""", 2)
+	
+	await wait(1)
+	changeToScene(splashSceneUID)
 
 func checkForSpwn():
 	var spwnoutput = []
@@ -76,8 +92,13 @@ func toggleOutput(create = outputRef == null):
 			outputRef.queue_free()
 			outputRef = null
 
-func saveScript(uid, code):
-	project["scripts"][uid] = code
+func saveScript(uid, code, type):
+	var scriptType = "scripts"
+	if type == 1:
+		scriptType = "scripts"
+	if type == 2:
+		scriptType = "compilingTimeScripts"
+	project[scriptType][uid] = code
 
 func saveObject(uid, Name, position, type, rotation, sceneUID, group = -1):
 	if group == -1:

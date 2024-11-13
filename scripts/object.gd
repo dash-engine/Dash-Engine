@@ -35,7 +35,8 @@ func _ready() -> void:
 			type = 1816
 		uid = UID.generate()
 		Global.saveObject(uid, Name, Position, type, Rotation, Global.currentScene)
-		Global.saveScript(uid, "")
+		Global.saveScript(uid,"/* This script is ran at runtime, this means all the code here will be executed ingame, delete this comment */",1)
+		Global.saveScript(uid,"/* This script is ran at compile-time, this means all the code here will be executed when compiling the game, delete this comment */",2)
 		group = Global.project["objects"][uid]["group"]
 	name = uid
 	if canvas == null:

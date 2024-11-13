@@ -19,12 +19,6 @@ func _process(delta: float) -> void:
 		if type > -1:
 			objTypeBox.selected = type
 
-func _on_edit_script_pressed() -> void:
-	if Global.current_selected_object:
-		var clone = load("res://scenes/scriptEditor.tscn").instantiate()
-		clone.uid = Global.current_selected_object.uid
-		get_tree().root.add_child(clone)
-
 func _on_obj_type_item_selected(index: int) -> void:
 	if Global.current_selected_object:
 		Global.current_selected_object.type = Objects.get_type(index)
@@ -33,3 +27,17 @@ func _on_obj_type_item_selected(index: int) -> void:
 func _on_delete_pressed() -> void:
 	if Global.current_selected_object:
 		Global.deleteObject(Global.current_selected_object.uid)
+
+func _on_edit_compilingtime_script_pressed() -> void:
+	if Global.current_selected_object:
+		var clone = load("res://scenes/scriptEditor.tscn").instantiate()
+		clone.Type = 2
+		clone.uid = Global.current_selected_object.uid
+		get_tree().root.add_child(clone)
+
+func _on_edit_script_pressed() -> void:
+	if Global.current_selected_object:
+		var clone = load("res://scenes/scriptEditor.tscn").instantiate()
+		clone.Type = 1
+		clone.uid = Global.current_selected_object.uid
+		get_tree().root.add_child(clone)

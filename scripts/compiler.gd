@@ -58,8 +58,8 @@ func compile():
 		var currentSceneNAME = scene["name"]
 		
 		scenesLibCode += """
-		'%s':%sg,
-		""" % [currentSceneNAME, currentSceneGroup]
+		'%s':{'sceneGroup':%sg,'sceneCamGroup':%sg},
+		""" % [currentSceneNAME, currentSceneGroup,sceneCamGroup]
 		
 		main_script += """
 			$.add(obj {
@@ -112,6 +112,7 @@ func compile():
 		var rotation = object["rotation"]
 		var group = object["group"]
 		var script = Global.project["scripts"].get(uid, "")
+		var compilingTimeScript = Global.project["compilingTimeScripts"].get(uid, "")
 		var code = """
 					extract obj_props;
 					extract import "imports.spwn";
@@ -121,12 +122,13 @@ func compile():
 					set_transparency = (transparency) {
 						this.alpha(transparency)
 					}
+					%s
 					execute = () {
 					/* Object script */
 					%s
 					};
 					return {execute: execute};
-		""" % [position.x, position.y, rotation, group, script]
+		""" % [position.x, position.y, rotation, group, compilingTimeScript, script]
 		objects_path.append(create_spwn("object_" + uid.replace("-", "_"), code))
 	
 	var final_script = ""

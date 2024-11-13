@@ -16,6 +16,7 @@ let endTriggerGroup = 9998g;
 
 // Function to create text objects
 create_text = (text, txt_x, txt_y, group = 0g, size = 1) {
+    $.print("Adding text...");
     return $.add(text.to_obj().with(X, txt_x).with(Y, txt_y).with(SCALING, size).with(obj_props.GROUPS,group));
 };
 
@@ -47,8 +48,10 @@ change_scene = (sceneName) {
         i++;
     }
 
-    let currentSceneGroup = scenesLib.scenes[sceneName]
+    let currentSceneGroup = scenesLib.scenes[sceneName]["sceneGroup"]
     currentSceneGroup.alpha(1)
+    
+    exitCamera(scenesLib.scenes[sceneName]["sceneCamGroup"])
 };
 
 endLevel = (){
