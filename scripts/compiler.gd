@@ -70,8 +70,10 @@ func compile():
 				GROUPS: %sg
 			});
 			%sg.alpha(0);
-			camera.static_camera(%sg, duration=0);
-		""" % [centerX, centerY, sceneCamGroup, sceneCamGroup, sceneCamGroup]
+			if %s == 1{
+				camera.static_camera(%sg, duration=0);
+			}
+		""" % [centerX, centerY, sceneCamGroup, sceneCamGroup, currentCamGroup, sceneCamGroup]
 		
 		for object_id in Global.project["objects"]:
 			var object = Global.project["objects"][object_id]
