@@ -12,11 +12,10 @@ let coreVersion = "0.0.1";
 let currentScene = 0;
 let scenes = 0;
 let endTriggerGroup = 9998g;
+let lock_players = true;
 
-
-// Function to create text objects
-create_text = (text, txt_x, txt_y, group = 0g, size = 1) {
-    return $.add(text.to_obj().with(X, txt_x).with(Y, txt_y).with(SCALING, size).with(obj_props.GROUPS,group));
+create_text = (text, txt_x, txt_y, group = 0g, size = 1, clr = 0c) {
+    return $.add(text.to_obj().with(X, txt_x).with(Y, txt_y).with(SCALING, size).with(obj_props.GROUPS,group).with(COLOR,clr));
 };
 
 // Function to count scenes
@@ -140,7 +139,7 @@ return {
     button_b_left_end: (g: p) => add(p2(ev_lup), g),
     button_b_right_end: (g: p) => add(p2(ev_rup), g),
 
-    init: (hide_players: @bool = true, disable_death_sfx: @bool = true, lock_players: @bool = true, hide_attempts: @bool = true) {
+    init: (hide_players: @bool = true, disable_death_sfx: @bool = true, hide_attempts: @bool = true) {
         plr = hide_players
         $.add(obj{ // options
             OBJ_ID: 2899,
@@ -173,15 +172,19 @@ return {
             TOUCH_TRIGGERED: true,
             SCALING: 50,
         })
+        camera.camera_mode(true)
         endTriggerGroup.toggle_off()
         if lock_players { // lock players movement
             for pos in [[-30, 15], [30, 15], [0, -15], [0, 45]] {
                 $.add(obj{
                     OBJ_ID: 1,
-                    X: pos[0], Y: pos[1],
+                    X: pos[0],
+                    Y: pos[1],
                     HIDE_OBJECT: true,
+                    //GROUPS: 999g
                 })
             }
+            //999g.move(1000,0,1000)
         }
     },
 }
