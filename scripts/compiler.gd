@@ -5,10 +5,12 @@ var temp = 1
 
 @export var compiling_song : AudioStreamPlayer2D
 @export var compiled_sound : AudioStreamPlayer2D
+@export var error_sound : AudioStreamPlayer2D
 
 var sceneSeparation = 500
 
 func compile():
+	await close_gd()
 	compiling_song.play()
 	temp += 1
 	Global.resetOutput()
@@ -121,9 +123,14 @@ func compile():
 					let position = {x:%s, y:%s}
 					let rotation = %s
 					let this = %sg
+					// Object functions //
 					set_transparency = (transparency) {
 						this.alpha(transparency)
 					}
+					delay = (seconds) {
+						
+					}
+					/////////////////////
 					%s
 					execute = () {
 					/* Object script */
@@ -146,9 +153,18 @@ func compile():
 	return {scenes: scenes}"""
 	create_spwn("scenes", scenesLibCode)
 	
-	await compileCommand()
+	await get_tree().create_timer(1).timeout
+	var compileOutput = await compileCommand()
+	if compileOutput.contains("Error comes from this macro call") or compileOutput.contains("Error when running this library/module") or compileOutput.contains("Error when parsing this library/module") or compileOutput.contains("you cannot add an obj type object at runtime"):
+		Global.addToOutput("THERE WAS AN ERROR WHILE COMPILING!", true)
+		error_sound.play()
+	elif compileOutput.contains("Error reading level"):
+		Global.addToOutput("This error should be fixed by entering the level in geometry dash adding any object and then save and exit", true)
+		error_sound.play()
+	else:
+		open_gd()
+		compiled_sound.play()
 	compiling_song.stop()
-	compiled_sound.play()
 	Global.addToOutput("-- End compiling --", true)
 
 func _ready() -> void:
@@ -175,6 +191,7 @@ func compileCommand():
 	
 	if error_code != OK:
 		print("exit with error: ", error_code)
+	return output[0]
 
 func file_exist(fileName):
 	var dir = DirAccess.open("user://")
@@ -215,3 +232,27 @@ func duplicateCoreFiles():
 			file_name = directory.get_next()
 
 		directory.list_dir_end() 
+
+func open_gd():
+	var output = []
+	
+	Global.addToOutput("Opening gd...", true)
+	
+	OS.execute("cmd", ["/c", "start", "steam://run/322170"], output, false)
+
+func close_gd():
+	var output = []
+	var error_code = 0
+	
+	Global.addToOutput("Closing gd...", true)
+	
+	OS.execute("tasklist", [], output, true, error_code)
+	var is_running = false
+	for line in output:
+		if "GeometryDash.exe" in line:
+			is_running = true
+			break
+	
+	if is_running:
+		OS.execute("taskkill", ["/F", "/IM", "GeometryDash.exe"], output, false)
+		await get_tree().create_timer(2.0).timeout
