@@ -34,6 +34,7 @@ return {
         OFFSET_X: property(28, @number, "OFFSET_X"),
         OFFSET_Y: property(29, @number, "OFFSET_Y"),
         OFFSET_MODE: property(101, @number, "OFFSET_MODE"),
+        FREE_MODE: property(111, @bool, "FREE_MODE"),
     },
     modes:
     {

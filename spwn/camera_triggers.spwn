@@ -57,4 +57,15 @@ return {
         })
         wait(duration)
     },
+    camera_mode: #[desc("Modifies the camera free mode"), example("camera_mode(true)")]
+    (
+        #[desc("Free mode")] free_mode: @bool,
+    ) -> @NULL {
+        $.add( trigger {
+            OBJ_ID: 2925,
+            X: -10,
+            Y: 10,
+            FREE_MODE: free_mode
+        })
+    },
 }
