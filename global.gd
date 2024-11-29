@@ -55,11 +55,11 @@ func _ready() -> void:
 
 Game.create_text("Made with dash engine",position.x,position.y,0g,1)
 
-wait(6)
+delay(6)
 
 Game.change_scene("main")""", 2)
 	
-	await wait(1)
+	await wait(.2)
 	changeToScene(splashSceneUID)
 
 func checkForSpwn():
