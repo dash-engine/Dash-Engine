@@ -39,6 +39,7 @@ return {
             STATIC_SMOOTH_VELOCITY: smooth_velocity,
             STATIC_SMOOTH_VELOCITY_MODIFIER: smooth_velocity_mod,
         })
+        wait(duration)
     },
     camera_offset: #[desc("Implementation of the camera offset trigger"), example("camera_offset(30, 25)")]
     (

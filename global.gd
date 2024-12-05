@@ -23,7 +23,7 @@ const maxScenes = 1000
 const objectGroup = 4000
 const maxObjects = 2000
 
-const camGroup = 6001
+const camGroup = 6000
 
 var objectConainer = null
 

@@ -28,6 +28,8 @@ func compile():
 	var main_script = """
 					extract obj_props;
 					extract import "imports.spwn";
+					//extract $;
+					
 					// GENERATED WITH GEOMETRY DASH GAME ENGINE
 					let engineVersion = "1.0";
 					Game.showWatermark();
@@ -47,13 +49,14 @@ func compile():
 	main_script += """
 		camera.static_camera(%sg, duration=0);
 	""" % mainCamGroup
-
+	
 	for scene in Global.project["scenes"]:
 		scene = Global.project["scenes"][scene]
 		currentCamGroup += 1
 		var centerX = sceneCenterX + (currentCamGroup * sceneSeparation)
 		var centerY = sceneCenterY
 		var sceneCamGroup = Global.camGroup + currentCamGroup
+		
 		var sceneUID = scene["uid"]
 		
 		var currentSceneGroup = scene["group"]
@@ -62,7 +65,9 @@ func compile():
 		scenesLibCode += """
 		'%s':{'sceneGroup':%sg,'sceneCamGroup':%sg},
 		""" % [currentSceneNAME, currentSceneGroup,sceneCamGroup]
-		
+		print("sdata ", scene)
+		print("currentCamGroup ", currentCamGroup)
+		print("sceneCamGroup ", sceneCamGroup)
 		main_script += """
 			$.add(obj {
 				OBJ_ID: 60,
@@ -106,7 +111,7 @@ func compile():
 				ROTATION: %s,
 				GROUPS: [%sg, %sg, %sg]
 			});
-			""" % [uid, type, centeredX, centeredY, rotation, Global.sceneGroup, currentSceneGroup, objectGroup, uid.replace("-", "_")]
+			""" % [uid, type, centeredX, centeredY, rotation, Global.sceneGroup, currentSceneGroup, objectGroup]
 	
 	for object_id in Global.project["objects"]:
 		var object = Global.project["objects"][object_id]
