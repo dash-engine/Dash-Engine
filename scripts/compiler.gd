@@ -106,7 +106,6 @@ func compile():
 				ROTATION: %s,
 				GROUPS: [%sg, %sg, %sg]
 			});
-			object_%s.execute();
 			""" % [uid, type, centeredX, centeredY, rotation, Global.sceneGroup, currentSceneGroup, objectGroup, uid.replace("-", "_")]
 	
 	for object_id in Global.project["objects"]:
@@ -120,6 +119,7 @@ func compile():
 		var code = """
 					extract obj_props;
 					extract import "imports.spwn";
+					extract $;
 					let position = {x:%s, y:%s}
 					let rotation = %s
 					let this = %sg
@@ -127,12 +127,9 @@ func compile():
 					set_transparency = (transparency) {
 						this.alpha(transparency)
 					}
-					delay = (seconds) {
-						
-					}
 					/////////////////////
 					%s
-					execute = () {
+					execute = (){
 					/* Object script */
 					%s
 					};
@@ -140,11 +137,16 @@ func compile():
 		""" % [position.x, position.y, rotation, group, compilingTimeScript, script]
 		objects_path.append(create_spwn("object_" + uid.replace("-", "_"), code))
 	
+	main_script += "\n999g.move(10000000,0,100000)\n"
+	
 	var final_script = ""
 	for file in objects_path:
 		final_script += """
 		let %s = import "%s";\n
 		""" % [file.replace(".spwn", ""), file]
+		main_script += """
+			%s.execute();
+		""" % [file.replace(".spwn", "")]
 	
 	final_script += main_script
 	create_spwn("main", final_script)
@@ -159,7 +161,7 @@ func compile():
 		Global.addToOutput("THERE WAS AN ERROR WHILE COMPILING!", true)
 		error_sound.play()
 	elif compileOutput.contains("Error reading level"):
-		Global.addToOutput("This error should be fixed by entering the level in geometry dash adding any object and then save and exit", true)
+		Global.addToOutput("""The level you're trying to change may be corrupted! This may be caused if Geometry Dash was forced closed or it crashed. to fix this error, you need to enter the level in geometry dash and then click "save and exit" """, true)
 		error_sound.play()
 	else:
 		open_gd()

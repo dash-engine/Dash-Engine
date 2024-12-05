@@ -172,6 +172,7 @@ return {
             TOUCH_TRIGGERED: true,
             SCALING: 50,
         })
+        BG.set(rgb(0,0,0))
         camera.camera_mode(true)
         endTriggerGroup.toggle_off()
         if lock_players { // lock players movement
@@ -181,7 +182,7 @@ return {
                     X: pos[0],
                     Y: pos[1],
                     HIDE_OBJECT: true,
-                    //GROUPS: 999g
+                    GROUPS: 999g
                 })
             }
             //999g.move(1000,0,1000)

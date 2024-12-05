@@ -55,7 +55,7 @@ func _ready() -> void:
 
 Game.create_text("Made with dash engine",position.x,position.y,0g,1)
 
-delay(6)
+wait(6)
 
 Game.change_scene("main")""", 2)
 	

@@ -31,3 +31,7 @@ Parser="*res://scripts/parser.gd"
 
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/function_type_autocomplete/plugin.cfg")
