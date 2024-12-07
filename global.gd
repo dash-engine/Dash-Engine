@@ -50,12 +50,12 @@ func _ready() -> void:
 	saveScene(mainSceneUID,"main",sceneGroup+1)
 	
 	var splashObjUID = UID.generate()
-	saveObject(splashObjUID,"Splash", Vector2(400,200), 1, 0, splashSceneUID)
+	saveObject(splashObjUID,"Splash", Vector2(384, 144), 1, 0, splashSceneUID)
 	saveScript(splashObjUID, """set_transparency(0)
 
 Game.create_text("Made with dash engine",position.x,position.y,0g,1)
 
-wait(6)
+wait(3)
 
 Game.change_scene("main")""", 2)
 	
