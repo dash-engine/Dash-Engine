@@ -14,7 +14,7 @@ return {
 	"scenes": {},
 	"files": {},
 	"groups": [],
-	"currenScene": "",
+	"currentScene": "",
 }
 
 const sceneGroup = 1001
@@ -210,6 +210,7 @@ func loadProjFile(Path):
 	project = Dictionary(projectData)
 	
 	refreshObjects()
+	mainScene.refresh_scene_list()
 	
 	for object in projectData["objects"]:
 		object = projectData["objects"][object]

@@ -46,3 +46,6 @@ func get_string(question = ""):
 
 func _on_add_collider_pressed() -> void:
 	add_object(false,true)
+
+func refresh_scene_list():
+	$fileManager._refresh_scene_list()
