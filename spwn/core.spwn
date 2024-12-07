@@ -2,54 +2,90 @@
 // DO NOT MODIFY THIS UNLESS YOU KNOW WHAT ARE YOU DOING
 
 extract obj_props;
-extract import "obj_props_2_2.spwn"
+extract import "obj_props_2_2.spwn";
+extract $;
 
 let camera = import "camera_triggers.spwn";
 let scenesLib = import "scenes.spwn";
 
 // Variables
-let coreVersion = "0.0.1";
-let currentScene = 0;
-let scenes = 0;
+let coreVersion = "0.0.3";
+let currentScene = counter(1);
+let scenes = counter(0);
 let endTriggerGroup = 9998g;
 let lock_players = true;
+
+count_scene = (){
+    scenes++;
+}
 
 create_text = (text, txt_x, txt_y, group = 0g, size = 1, clr = 0c) {
     return $.add(text.to_obj().with(X, txt_x).with(Y, txt_y).with(SCALING, size).with(obj_props.GROUPS,group).with(COLOR,clr));
 };
 
-// Function to count scenes
-countScene = () {
-    scenes += 1;
-};
 exitCamera = (camGroup){
-    camera.static_camera(camGroup, exit_static=true, instant_exit=true);
+    camera.static_camera(camGroup, duration = 0, exit_static=true, instant_exit=true);
 };
 
-// Function to change the current scene
-change_scene = (sceneName) {
-    // Hide all scenes
+/*change_scene = (sceneName) {
+    let oldScene = scenesLib.currentScene
     let firstGroupNumber = 1001;
+    let maxScenes = 1000;
+
+    for i in scenesLib.scenes{
+        if i[1]["id"] == oldScene{
+            let oldSceneOGroup = i[1]["sceneGroup"]
+            let oldSceneCGroup = i[1]["sceneCamGroup"]
+            oldSceneOGroup.alpha(0);
+            exitCamera(oldSceneCGroup)
+        }
+        if i[0] == sceneName{
+            scenesLib.changeScene(i[1]["id"])
+            let newSceneOGroup = i[1]["sceneGroup"]
+            let newSceneCGroup = i[1]["sceneCamGroup"]
+            newSceneOGroup.alpha(1);
+            camera.static_camera(oldSceneCGroup, duration=0)
+        }
+    }
+};*/
+
+toconst = (Counter){
+    let a = []
+    let i = 0
+    while counter(i) != Counter{
+        print(i)
+        i++
+    }
+    return i
+}
+
+change_scene = (sceneName) {
+    /*let firstGroupNumber = 1001;
     let maxScenes = 1000;
 
     let sceneGroups = []
     
     for i in 1001g..2001g{
         sceneGroups.push(i)
+        exitCamera(sCam)
+    }*/
+
+    for i in scenesLib.scenes{
+        let sName = i[0]
+        let sData = i[1]
+        let sID = sData["id"]
+        let sGroup = sData["sceneGroup"]
+        let sCam = sData["sceneCamGroup"]
+
+        if sName == sceneName{
+            currentScene = counter(sID)
+            sGroup.alpha(1)
+            camera.static_camera(sCam, duration=0);
+        }else{
+            sGroup.alpha(0)
+            exitCamera(sCam)
+        }
     }
-
-    let i = 0;
-
-    while (i <= scenes) {
-        let groupModifying = sceneGroups[i];
-        groupModifying.alpha(0);
-        i++;
-    }
-
-    let currentSceneGroup = scenesLib.scenes[sceneName]["sceneGroup"]
-    currentSceneGroup.alpha(1)
-    
-    exitCamera(scenesLib.scenes[sceneName]["sceneCamGroup"])
 };
 
 endLevel = (){
@@ -115,11 +151,11 @@ add = (b,g) => b.with(TARGET, g.start_group if g.type == @trigger_function else 
 return {
     create_text: create_text,
     change_scene: change_scene,
-    countScene: countScene,
     showWatermark: showWatermark,
     playSound: playSound,
     endLevel: endLevel,
-    exitCamera:exitCamera,
+    exitCamera: exitCamera,
+    count_scene: count_scene,
     /*         GAMESCENE            */
     // g = group or trigger function, p = pattern
     button: (g: p) => add(ev_down, g),
@@ -172,7 +208,10 @@ return {
             TOUCH_TRIGGERED: true,
             SCALING: 50,
         })
+        
         BG.set(rgb(0,0,0))
+        1001c.set(rgb(0,0,0))
+        1009c.set(rgb(0,0,0))
         camera.camera_mode(true)
         endTriggerGroup.toggle_off()
         if lock_players { // lock players movement

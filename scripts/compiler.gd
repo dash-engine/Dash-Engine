@@ -28,6 +28,7 @@ func compile():
 	var main_script = """
 					extract obj_props;
 					extract import "imports.spwn";
+					let scenesLib = import "scenes.spwn";
 					//extract $;
 					
 					// GENERATED WITH GEOMETRY DASH GAME ENGINE
@@ -63,8 +64,8 @@ func compile():
 		var currentSceneNAME = scene["name"]
 		
 		scenesLibCode += """
-		'%s':{'sceneGroup':%sg,'sceneCamGroup':%sg},
-		""" % [currentSceneNAME, currentSceneGroup,sceneCamGroup]
+		'%s':{'sceneGroup':%sg,'sceneCamGroup':%sg, 'id':%s},
+		""" % [currentSceneNAME, currentSceneGroup,sceneCamGroup,currentCamGroup]
 		print("sdata ", scene)
 		print("currentCamGroup ", currentCamGroup)
 		print("sceneCamGroup ", sceneCamGroup)
@@ -77,6 +78,7 @@ func compile():
 				GROUPS: %sg
 			});
 			%sg.alpha(0);
+			Game.count_scene()
 			if %s == 1{
 				camera.static_camera(%sg, duration=0);
 			}
