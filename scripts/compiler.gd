@@ -130,6 +130,7 @@ func compile():
 					let position = {x:%s, y:%s}
 					let rotation = %s
 					let this = %sg
+					let objScene = counter(%s)
 					// Object functions //
 					set_transparency = (transparency) {
 						this.alpha(transparency)
@@ -137,14 +138,14 @@ func compile():
 					/////////////////////
 					%s
 					execute = (){
+					if objScene != Game.currentScene{
 					/* Object script */
 					%s
+					}
 					};
 					return {execute: execute};
-		""" % [position.x, position.y, rotation, group, compilingTimeScript, script]
+		""" % [position.x, position.y, rotation, group, currentCamGroup, compilingTimeScript, script]
 		objects_path.append(create_spwn("object_" + uid.replace("-", "_"), code))
-	
-	main_script += "\n999g.move(10000000,0,100000)\n"
 	
 	var final_script = ""
 	for file in objects_path:
@@ -154,6 +155,8 @@ func compile():
 		main_script += """
 			%s.execute();
 		""" % [file.replace(".spwn", "")]
+	
+	main_script += "\n999g.move(10000000,0,100000)\n"
 	
 	final_script += main_script
 	create_spwn("main", final_script)

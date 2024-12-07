@@ -15,6 +15,10 @@ let scenes = counter(0);
 let endTriggerGroup = 9998g;
 let lock_players = true;
 
+warn = (text){
+    print("WARNING: " + text)
+}
+
 count_scene = (){
     scenes++;
 }
@@ -27,28 +31,6 @@ exitCamera = (camGroup){
     camera.static_camera(camGroup, duration = 0, exit_static=true, instant_exit=true);
 };
 
-/*change_scene = (sceneName) {
-    let oldScene = scenesLib.currentScene
-    let firstGroupNumber = 1001;
-    let maxScenes = 1000;
-
-    for i in scenesLib.scenes{
-        if i[1]["id"] == oldScene{
-            let oldSceneOGroup = i[1]["sceneGroup"]
-            let oldSceneCGroup = i[1]["sceneCamGroup"]
-            oldSceneOGroup.alpha(0);
-            exitCamera(oldSceneCGroup)
-        }
-        if i[0] == sceneName{
-            scenesLib.changeScene(i[1]["id"])
-            let newSceneOGroup = i[1]["sceneGroup"]
-            let newSceneCGroup = i[1]["sceneCamGroup"]
-            newSceneOGroup.alpha(1);
-            camera.static_camera(oldSceneCGroup, duration=0)
-        }
-    }
-};*/
-
 toconst = (Counter){
     let a = []
     let i = 0
@@ -60,16 +42,7 @@ toconst = (Counter){
 }
 
 change_scene = (sceneName) {
-    /*let firstGroupNumber = 1001;
-    let maxScenes = 1000;
-
-    let sceneGroups = []
-    
-    for i in 1001g..2001g{
-        sceneGroups.push(i)
-        exitCamera(sCam)
-    }*/
-
+    let found = false
     for i in scenesLib.scenes{
         let sName = i[0]
         let sData = i[1]
@@ -81,10 +54,14 @@ change_scene = (sceneName) {
             currentScene = counter(sID)
             sGroup.alpha(1)
             camera.static_camera(sCam, duration=0);
+            found = true
         }else{
             sGroup.alpha(0)
             exitCamera(sCam)
         }
+    }
+    if !found{
+        warn("scene not found!")
     }
 };
 
@@ -104,11 +81,13 @@ playSound = (sound_id = 1, speed = 1, pitch = 1, loop = false){
 };
 
 showWatermark = (){
-create_text("Made with Dash Game Engine", -50, 2000+500,0g,0.6);
-create_text("Github: github.com/dash-engine/Dash-Engine", -50, 1960+500,0g,0.6);
-// Core version text
-create_text("Using core ver:", -50, 1940+500,0g,0.6);
-create_text(coreVersion,80,1940+500,0g,0.6);
+    print("Creating engine core texts")
+    create_text("Made with Dash Game Engine", -50, 2000+500,0g,0.6);
+    create_text("Github: github.com/dash-engine/Dash-Engine", -50, 1960+500,0g,0.6);
+    // Core version text
+    create_text("Using core ver:", -50, 1940+500,0g,0.6);
+    create_text(coreVersion,80,1940+500,0g,0.6);
+    print("Done creating engine core texts")
 }
 
 /* 2.2 Gamescene, Thanks to: github.com/itsmebombie/gamescene-2.2/tree/main */
@@ -156,6 +135,7 @@ return {
     endLevel: endLevel,
     exitCamera: exitCamera,
     count_scene: count_scene,
+    currentScene: currentScene,
     /*         GAMESCENE            */
     // g = group or trigger function, p = pattern
     button: (g: p) => add(ev_down, g),
