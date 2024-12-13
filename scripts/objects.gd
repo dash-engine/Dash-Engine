@@ -10,6 +10,10 @@ var OBJECTS_IDS = [
 		"block": "spike"
 	},
 	{
+		"id": 912,
+		"block": "text"
+	},
+	{
 		"id": 1816,
 		"block": "COLLISION_BLOCK"
 	}

@@ -50,7 +50,7 @@ func _ready() -> void:
 	saveScene(mainSceneUID,"main",sceneGroup+1)
 	
 	var splashObjUID = UID.generate()
-	saveObject(splashObjUID,"Splash", Vector2(384, 144), 1, 0, splashSceneUID)
+	saveObject(splashObjUID,"Splash", Vector2(384, 144), 1, 0, splashSceneUID, {})
 	saveScript(splashObjUID, """set_transparency(0)
 
 Game.create_text("Made with dash engine",position.x,position.y,0g,1)
@@ -100,7 +100,7 @@ func saveScript(uid, code, type):
 		scriptType = "compilingTimeScripts"
 	project[scriptType][uid] = code
 
-func saveObject(uid, Name, position, type, rotation, sceneUID, group = -1):
+func saveObject(uid, Name, position, type, rotation, sceneUID, DATA, group = -1):
 	if group == -1:
 		group = get_next_group()
 	last_used_group = group
@@ -111,6 +111,7 @@ func saveObject(uid, Name, position, type, rotation, sceneUID, group = -1):
 		"rotation": rotation,
 		"type": type,
 		"sceneUID": sceneUID,
+		"DATA": DATA,
 		"group": group,
 	}
 

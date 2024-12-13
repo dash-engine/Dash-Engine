@@ -54,7 +54,7 @@ offset_bottom = 110.0
 theme = ExtResource("2_b2s04")
 text = "Add collider"
 
-[node name="properties" type="Control" parent="." node_paths=PackedStringArray("nameTextBox", "uidTextBox", "groupTextBox", "editScriptButton", "objTypeBox")]
+[node name="properties" type="Control" parent="." node_paths=PackedStringArray("nameTextBox", "uidTextBox", "groupTextBox", "editScriptButton", "textTextBox", "objTypeBox")]
 anchors_preset = 0
 offset_top = 4.0
 offset_right = 4.0
@@ -64,6 +64,7 @@ nameTextBox = NodePath("name")
 uidTextBox = NodePath("UID")
 groupTextBox = NodePath("Group")
 editScriptButton = NodePath("editRuntimeScript")
+textTextBox = NodePath("TEXT")
 objTypeBox = NodePath("objType/objType")
 
 [node name="name" type="TextEdit" parent="properties"]
@@ -73,6 +74,15 @@ offset_top = 32.0
 offset_right = 1152.0
 offset_bottom = 67.0
 placeholder_text = "Name"
+
+[node name="TEXT" type="TextEdit" parent="properties"]
+visible = false
+layout_mode = 0
+offset_left = 994.0
+offset_top = 171.0
+offset_right = 1152.0
+offset_bottom = 206.0
+placeholder_text = "Text"
 
 [node name="UID" type="TextEdit" parent="properties"]
 layout_mode = 0
@@ -141,10 +151,12 @@ offset_left = 994.0
 offset_top = 120.0
 offset_right = 1152.0
 offset_bottom = 151.0
-item_count = 2
+item_count = 3
 popup/item_0/text = "block"
 popup/item_1/text = "spike"
 popup/item_1/id = 1
+popup/item_2/text = "Text"
+popup/item_2/id = 3
 
 [node name="Topbar" type="Control" parent="."]
 anchors_preset = 0
@@ -204,6 +216,7 @@ size = Vector2i(134, 100)
 
 [connection signal="pressed" from="addObj" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="addCollider" to="." method="_on_add_collider_pressed"]
+[connection signal="text_changed" from="properties/TEXT" to="properties" method="_on_text_text_changed"]
 [connection signal="pressed" from="properties/editRuntimeScript" to="properties" method="_on_edit_script_pressed"]
 [connection signal="pressed" from="properties/editCompilingtimeScript" to="properties" method="_on_edit_compilingtime_script_pressed"]
 [connection signal="pressed" from="properties/delete" to="properties" method="_on_delete_pressed"]

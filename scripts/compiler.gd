@@ -99,6 +99,12 @@ func compile():
 			var rotation = object.get("rotation", 0.0)
 			var type = object["type"]
 			var objectGroup = object["group"]
+			var DATA = object["DATA"]
+			
+			var moreCode = ""
+			
+			if DATA.has("text"):
+				moreCode += "TEXT: " + DATA["text"] + ","
 			
 			var centeredX = (centerX + pos.x)/1.5
 			var centeredY = (centerY + pos.y)/1.5
@@ -111,9 +117,10 @@ func compile():
 				X: %s,
 				Y: %s,
 				ROTATION: %s,
+				%s
 				GROUPS: [%sg, %sg, %sg]
 			});
-			""" % [uid, type, centeredX, centeredY, rotation, Global.sceneGroup, currentSceneGroup, objectGroup]
+			""" % [uid, type, centeredX, centeredY, rotation, moreCode, Global.sceneGroup, currentSceneGroup, objectGroup]
 	
 	for object_id in Global.project["objects"]:
 		var object = Global.project["objects"][object_id]
@@ -167,6 +174,7 @@ func compile():
 	
 	await get_tree().create_timer(1).timeout
 	var compileOutput = await compileCommand()
+	print(compileOutput)
 	if compileOutput.contains("Error comes from this macro call") or compileOutput.contains("Error when running this library/module") or compileOutput.contains("Error when parsing this library/module") or compileOutput.contains("you cannot add an obj type object at runtime"):
 		Global.addToOutput("THERE WAS AN ERROR WHILE COMPILING!", true)
 		error_sound.play()
@@ -174,7 +182,7 @@ func compile():
 		Global.addToOutput("""The level you're trying to change may be corrupted! This may be caused if Geometry Dash was forced closed or it crashed. to fix this error, you need to enter the level in geometry dash and then click "save and exit" """, true)
 		error_sound.play()
 	else:
-		open_gd()
+		#open_gd()
 		compiled_sound.play()
 	compiling_song.stop()
 	Global.addToOutput("-- End compiling --", true)
@@ -195,7 +203,7 @@ func compileCommand():
 	
 	var command = "spwn"
 	var arguments = ["build", '"'+OS.get_user_data_dir()+"/temp/"+filename+'"', "--level-name", '"%s"' % Global.levelName]
-	print('"'+OS.get_user_data_dir()+"/temp/"+filename+'"')
+	print("args: ",arguments)
 	var output = []
 	var error_code = await OS.execute(command, arguments, output, true, false)
 	

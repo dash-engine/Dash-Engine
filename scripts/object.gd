@@ -24,6 +24,8 @@ const GRID_SIZE = 8
 
 @export var initializate = false
 
+@export var DATA = {}
+
 var alrPressed = false
 var pressedDebounce = false
 
@@ -34,7 +36,7 @@ func _ready() -> void:
 		if collider:
 			type = 1816
 		uid = UID.generate()
-		Global.saveObject(uid, Name, Position, type, Rotation, Global.currentScene)
+		Global.saveObject(uid, Name, Position, type, Rotation, Global.currentScene,DATA)
 		Global.saveScript(uid,"/* This script is ran at runtime, this means all the code here will be executed ingame, you can delete this comment */",1)
 		Global.saveScript(uid,"/* This script is ran at compile-time, this means all the code here will be executed when compiling the game.\nNote: THIS SCRIPT WILL BE RUN EVEN IF YOU ARE NOT IN THE SCENE!\nYou can delete this comment */",2)
 		group = Global.project["objects"][uid]["group"]
@@ -86,6 +88,16 @@ func _process(delta):
 		position = new_position
 	if alrPressed:
 		pressed()
+	if type == 912:
+		Sprite.visible = false
+		if DATA.has("text"):
+			$Text.text = DATA["text"]
+		else:
+			DATA["text"] = "A"
+		$Text.position = Vector2(lerp(0, -128, $Text.text.length() / 20), 0)
+	else:
+		Sprite.visible = true
+		$Text.text = ""
 
 func getSprite():
 	if collider:
