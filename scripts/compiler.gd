@@ -104,7 +104,7 @@ func compile():
 			var moreCode = ""
 			
 			if DATA.has("text"):
-				moreCode += "TEXT: " + DATA["text"] + ","
+				moreCode += "TEXT: '" + DATA["text"] + "',"
 			
 			var centeredX = (centerX + pos.x)/1.5
 			var centeredY = (centerY + pos.y)/1.5
@@ -163,7 +163,7 @@ func compile():
 			%s.execute();
 		""" % [file.replace(".spwn", "")]
 	
-	main_script += "\n999g.move(10000000,0,100000)\n"
+	main_script += "\n10000g.move(10000000,0,100000)\n"
 	
 	final_script += main_script
 	create_spwn("main", final_script)

@@ -143,6 +143,7 @@ func changeToScene(uid):
 			newObj.Rotation = obj["rotation"]
 			newObj.type = obj["type"]
 			newObj.group = obj["group"]
+			newObj.DATA = obj["DATA"]
 			newObj.position = stringToVector2(obj["position"])
 
 func createFile():
@@ -226,6 +227,7 @@ func loadProjFile(Path):
 		##
 		newObj.type = object["type"]
 		newObj.group = object["group"]
+		newObj.DATA = object["DATA"]
 	for scene in projectData["scenes"]:
 		scene = projectData["scenes"][scene]
 	changeToScene(project["currentScene"])
@@ -236,7 +238,9 @@ func deleteObject(uid):
 		project["groups"].erase(group_to_delete)
 		current_selected_object = null
 		if objectConainer:
-			objectConainer.get_node(uid).queue_free()
+			var objDeleting = objectConainer.get_node(uid)
+			if objDeleting:
+				objDeleting.queue_free()
 		project["objects"].erase(uid)
 	else:
 		print("No object found with uid: ", uid)

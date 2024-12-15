@@ -18,6 +18,8 @@ func _process(delta: float) -> void:
 		groupTextBox.text = "Group: " + str(Global.current_selected_object.group) + "g"
 	if oldSelected != Global.current_selected_object or updateProperties:
 		oldSelected = Global.current_selected_object
+		if not Global.current_selected_object:
+			return
 		var type = Objects.get_index_by_id(Global.current_selected_object.type)
 		if type > -1:
 			objTypeBox.selected = type

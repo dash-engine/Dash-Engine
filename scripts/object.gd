@@ -54,7 +54,14 @@ func pressed():
 		pressedDebounce = true
 		Global.current_selected_object = self
 
+func IExist():
+	if not Global.project["objects"].has(uid):
+		queue_free()
+		return false
+	return true
+
 func _gui_input(event):
+	if not IExist(): return
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
@@ -73,6 +80,7 @@ func _gui_input(event):
 				pass
 
 func _process(delta):
+	if not IExist(): return
 	if oldType != type:
 		oldType = type
 		getSprite()
@@ -91,13 +99,17 @@ func _process(delta):
 	if type == 912:
 		Sprite.visible = false
 		if DATA.has("text"):
-			$Text.text = DATA["text"]
+			if $Text.text != DATA["text"]:
+				$Text.text = DATA["text"]
+				print("UPDATE ",DATA["text"])
+				print(DATA)
 		else:
 			DATA["text"] = "A"
 		$Text.position = Vector2(lerp(0, -128, $Text.text.length() / 20), 0)
 	else:
 		Sprite.visible = true
 		$Text.text = ""
+	Global.project["objects"][uid]["DATA"] = DATA
 
 func getSprite():
 	if collider:
