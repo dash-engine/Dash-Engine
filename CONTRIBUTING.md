@@ -1,4 +1,4 @@
-# Contributing to Dash-Engine
+# Contributing to Dash Engine
 
 Thank you for considering contributing to Dash Engine! Your support helps improve this game engine for everyone.
 
@@ -103,7 +103,7 @@ git push origin feature/your-feature-name
 
 ## Submitting a Pull Request
 
-1. Navigate to the original Dash-Engine repository.
+1. Navigate to the original Dash Engine repository.
 2. Click on the "Pull Requests" tab.
 3. Click "New Pull Request" and select your branch.
 4. Provide a clear description of your changes and any related issues.
@@ -125,4 +125,4 @@ If you encounter any issues or have suggestions:
 
 If you have questions or need assistance, feel free to open a discussion in the [Discussions](https://github.com/dash-engine/Dash-Engine/discussions) tab or comment on an existing issue.
 
-Thank you for contributing to Dash-Engine! 
+Thank you for contributing to Dash Engine! 
