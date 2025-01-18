@@ -45,7 +45,7 @@ func _ready() -> void:
 		if get_parent():
 			if get_parent().is_class("Control"):
 				canvas = get_parent()
-	canvas_rect = Rect2(canvas.position - Vector2(146, 32), canvas.size)
+	canvas_rect = Rect2(Vector2(0, 0), canvas.size)
 	if collider:
 		Sprite.texture = load("res://assets/sprites/collider.png")
 

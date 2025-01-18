@@ -32,10 +32,10 @@ canvas = NodePath("canvas")
 
 [node name="canvas" type="ColorRect" parent="."]
 layout_mode = 0
-offset_left = 146.0
-offset_top = 32.0
-offset_right = 994.0
-offset_bottom = 524.0
+offset_left = 169.0
+offset_top = 39.0
+offset_right = 969.0
+offset_bottom = 529.0
 color = Color(0.374139, 0.374139, 0.374139, 1)
 
 [node name="addObj" type="Button" parent="."]
@@ -157,6 +157,7 @@ popup/item_1/text = "spike"
 popup/item_1/id = 1
 popup/item_2/text = "Text"
 popup/item_2/id = 3
+popup/item_2/disabled = true
 
 [node name="Topbar" type="Control" parent="."]
 anchors_preset = 0

@@ -7,7 +7,7 @@ var temp = 1
 @export var compiled_sound : AudioStreamPlayer2D
 @export var error_sound : AudioStreamPlayer2D
 
-var sceneSeparation = 500
+var sceneSeparation = 1250
 
 func compile():
 	await close_gd()
@@ -42,7 +42,7 @@ func compile():
 		let scenes = {
 		"""
 
-	var sceneCenterX = 200
+	var sceneCenterX = 0#200
 	var sceneCenterY = 500
 	var currentCamGroup = 0
 	var mainCamGroup = Global.camGroup
@@ -103,11 +103,13 @@ func compile():
 			
 			var moreCode = ""
 			
-			if DATA.has("text"):
-				moreCode += "TEXT: '" + DATA["text"] + "',"
+			var centeredX = (centerX + (pos.x-146))/1.24
+			var centeredY = (centerY + (pos.y-35))/1.47
+			print("centeredX ",centeredX)
+			print("centeredY ",centeredY)
 			
-			var centeredX = (centerX + pos.x)/1.5
-			var centeredY = (centerY + pos.y)/1.5
+			if DATA.has("text"):
+				moreCode += """TEXT: "%s",""" % [DATA["text"]]
 			
 			objectsPos[uid] = {"x": centeredX, "y": centeredY}
 			main_script += """
@@ -182,7 +184,7 @@ func compile():
 		Global.addToOutput("""The level you're trying to change may be corrupted! This may be caused if Geometry Dash was forced closed or it crashed. to fix this error, you need to enter the level in geometry dash and then click "save and exit" """, true)
 		error_sound.play()
 	else:
-		#open_gd()
+		open_gd()
 		compiled_sound.play()
 	compiling_song.stop()
 	Global.addToOutput("-- End compiling --", true)
