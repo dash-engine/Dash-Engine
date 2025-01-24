@@ -42,7 +42,7 @@ func compile():
 		let scenes = {
 		"""
 
-	var sceneCenterX = 0#200
+	var sceneCenterX = sceneSeparation
 	var sceneCenterY = 500
 	var currentCamGroup = 0
 	var mainCamGroup = Global.camGroup
@@ -54,7 +54,7 @@ func compile():
 	for scene in Global.project["scenes"]:
 		scene = Global.project["scenes"][scene]
 		currentCamGroup += 1
-		var centerX = sceneCenterX + (currentCamGroup * sceneSeparation)
+		var centerX = sceneCenterX #+ (currentCamGroup * sceneSeparation)
 		var centerY = sceneCenterY
 		var sceneCamGroup = Global.camGroup + currentCamGroup
 		
@@ -82,7 +82,12 @@ func compile():
 			if %s == 1{
 				camera.static_camera(%sg, duration=0);
 			}
-		""" % [centerX, centerY, sceneCamGroup, sceneCamGroup, currentCamGroup, sceneCamGroup]
+		""" % [centerX*1.30, centerY*1.40, sceneCamGroup, sceneCamGroup, currentCamGroup, sceneCamGroup]
+		
+		var scene_scale_x = 1
+		var scene_scale_y = 1
+		var offset_x = 0
+		var offset_y = 0
 		
 		for object_id in Global.project["objects"]:
 			var object = Global.project["objects"][object_id]
@@ -93,8 +98,6 @@ func compile():
 				continue
 			added_uids[uid] = true
 			
-			print("Adding object to main_script | UID", uid)
-			
 			var pos = Global.stringToVector2(object["position"])
 			var rotation = object.get("rotation", 0.0)
 			var type = object["type"]
@@ -103,10 +106,10 @@ func compile():
 			
 			var moreCode = ""
 			
-			var centeredX = (centerX + (pos.x-146))/1.24
-			var centeredY = (centerY + (pos.y-35))/1.47
-			print("centeredX ",centeredX)
-			print("centeredY ",centeredY)
+			var centeredX = centerX + (pos.x * scene_scale_x) + offset_x
+			var centeredY = centerY + (pos.y * scene_scale_y) + offset_y
+			
+			print("Object UID: %s, CenteredX: %s, CenteredY: %s" % [uid, centeredX, centeredY])
 			
 			if DATA.has("text"):
 				moreCode += """TEXT: "%s",""" % [DATA["text"]]
@@ -136,6 +139,7 @@ func compile():
 					extract obj_props;
 					extract import "imports.spwn";
 					extract $;
+					let objectUID = "%s"
 					let position = {x:%s, y:%s}
 					let rotation = %s
 					let this = %sg
@@ -145,15 +149,25 @@ func compile():
 						this.alpha(transparency)
 					}
 					/////////////////////
+					
+					// The obj will not be shown at the starting
+					set_transparency(0)
+					print("executing object: " + objectUID)
+					/* Compiling script */
 					%s
-					execute = (){
-					if objScene != Game.currentScene{
+					/* ---------------- */
+					while_loop(() => objScene != Game.currentScene, (){
+						wait(0.1)
+					})
+					set_transparency(1)
+					execute = () {
+					if objScene == Game.currentScene{
 					/* Object script */
 					%s
 					}
 					};
 					return {execute: execute};
-		""" % [position.x, position.y, rotation, group, currentCamGroup, compilingTimeScript, script]
+		""" % [uid, position.x, position.y, rotation, group, currentCamGroup, compilingTimeScript, script]
 		objects_path.append(create_spwn("object_" + uid.replace("-", "_"), code))
 	
 	var final_script = ""
