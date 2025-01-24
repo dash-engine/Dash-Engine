@@ -9,10 +9,10 @@ let camera = import "camera_triggers.spwn";
 let scenesLib = import "scenes.spwn";
 
 // Variables
-let coreVersion = "0.0.3";
+let coreVersion = "0.0.5";
 let currentScene = counter(1);
 let scenes = counter(0);
-let endTriggerGroup = 9998g;
+let endTriggerGroup = 10000g;
 let lock_players = true;
 
 warn = (text){
@@ -23,7 +23,7 @@ count_scene = (){
     scenes++;
 }
 
-create_text = (text, txt_x, txt_y, group = 0g, size = 1, clr = 0c) {
+create_text = (text, txt_x, txt_y, group = 0g, size = 1, clr = 0c){
     return $.add(text.to_obj().with(X, txt_x).with(Y, txt_y).with(SCALING, size).with(obj_props.GROUPS,group).with(COLOR,clr));
 };
 
@@ -53,15 +53,17 @@ change_scene = (sceneName) {
         if sName == sceneName{
             currentScene = counter(sID)
             sGroup.alpha(1)
-            camera.static_camera(sCam, duration=0);
+            //camera.static_camera(sCam, duration=0);
             found = true
         }else{
             sGroup.alpha(0)
-            exitCamera(sCam)
+            //exitCamera(sCam)
         }
     }
     if !found{
         warn("scene not found!")
+    }else{
+        return 1
     }
 };
 
@@ -145,7 +147,7 @@ return {
     button_b: (g: p) => add(p2(ev_down), g),
     button_a_end: (g: p) => add(p1(ev_up), g),
     button_b_end: (g: p) => add(p2(ev_up), g),
-    
+
     button_a_left: (g: p) => add(p1(ev_ldown), g),
     button_a_right: (g: p) => add(p1(ev_rdown), g),
     button_b_left: (g: p) => add(p2(ev_ldown), g),
@@ -184,11 +186,11 @@ return {
         })
         $.add(obj{ // End
             OBJ_ID: 3600,
-            GROUPS: endTriggerGroup,
+            GROUPS: [endTriggerGroup,9999g],
             TOUCH_TRIGGERED: true,
             SCALING: 50,
         })
-        
+
         BG.set(rgb(0,0,0))
         1001c.set(rgb(0,0,0))
         1009c.set(rgb(0,0,0))
@@ -204,7 +206,6 @@ return {
                     GROUPS: 999g
                 })
             }
-            //999g.move(1000,0,1000)
         }
     },
 }
