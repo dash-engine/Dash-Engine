@@ -13,11 +13,11 @@ return {
 	"objects": {},
 	"scenes": {},
 	"files": {},
-	"groups": [],
+	"groups": [1001],
 	"currentScene": "",
 }
 
-const sceneGroup = 1001
+const sceneGroup = 1006
 const maxScenes = 1000
 
 const objectGroup = 4000
@@ -46,8 +46,8 @@ func _ready() -> void:
 	checkForSpwn()
 	var splashSceneUID = UID.generate()
 	var mainSceneUID = UID.generate()
-	saveScene(splashSceneUID,"splash",sceneGroup)
-	saveScene(mainSceneUID,"main",sceneGroup+1)
+	saveScene(splashSceneUID,"splash",sceneGroup+1)
+	saveScene(mainSceneUID,"main",sceneGroup+2)
 	
 	var splashObjUID = UID.generate()
 	saveObject(splashObjUID,"Splash", Vector2(384, 144), 1, 0, splashSceneUID, {})

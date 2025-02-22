@@ -25,7 +25,8 @@ func compile():
 	var objectsPos = {}
 	var added_uids = {}
 	
-	var main_script = """
+	var main_script = "" 
+	var scr_head = """
 					extract obj_props;
 					extract import "imports.spwn";
 					let scenesLib = import "scenes.spwn";
@@ -37,39 +38,21 @@ func compile():
 					// Init game
 					Game.init()
 					"""
-
+	
 	var scenesLibCode = """
 		let scenes = {
 		"""
-
+	
 	var sceneCenterX = sceneSeparation
-	var sceneCenterY = 500
-	var currentCamGroup = 0
+	var sceneCenterY = 700
 	var mainCamGroup = Global.camGroup
+	var sceneID = 0
 	
 	main_script += """
 		camera.static_camera(%sg, duration=0);
 	""" % mainCamGroup
 	
-	for scene in Global.project["scenes"]:
-		scene = Global.project["scenes"][scene]
-		currentCamGroup += 1
-		var centerX = sceneCenterX #+ (currentCamGroup * sceneSeparation)
-		var centerY = sceneCenterY
-		var sceneCamGroup = Global.camGroup + currentCamGroup
-		
-		var sceneUID = scene["uid"]
-		
-		var currentSceneGroup = scene["group"]
-		var currentSceneNAME = scene["name"]
-		
-		scenesLibCode += """
-		'%s':{'sceneGroup':%sg,'sceneCamGroup':%sg, 'id':%s},
-		""" % [currentSceneNAME, currentSceneGroup,sceneCamGroup,currentCamGroup]
-		print("sdata ", scene)
-		print("currentCamGroup ", currentCamGroup)
-		print("sceneCamGroup ", sceneCamGroup)
-		main_script += """
+	main_script += """
 			$.add(obj {
 				OBJ_ID: 60,
 				X: %s,
@@ -79,10 +62,24 @@ func compile():
 			});
 			%sg.alpha(0);
 			Game.count_scene()
-			if %s == 1{
-				camera.static_camera(%sg, duration=0);
-			}
-		""" % [centerX*1.30, centerY*1.40, sceneCamGroup, sceneCamGroup, currentCamGroup, sceneCamGroup]
+		""" % [sceneCenterX/1.42, sceneCenterY/1.5, mainCamGroup, mainCamGroup]
+	
+	for scene in Global.project["scenes"]:
+		scene = Global.project["scenes"][scene]
+		var centerX = sceneCenterX
+		var centerY = sceneCenterY
+		
+		sceneID+=1
+		
+		var sceneUID = scene["uid"]
+		
+		var currentSceneGroup = scene["group"]
+		var currentSceneNAME = scene["name"]
+		
+		scenesLibCode += """
+		'%s':{'sceneGroup':%sg,'id':%s},
+		""" % [currentSceneNAME,currentSceneGroup,sceneID]
+		print("sdata ", scene)
 		
 		var scene_scale_x = 1
 		var scene_scale_y = 1
@@ -106,8 +103,8 @@ func compile():
 			
 			var moreCode = ""
 			
-			var centeredX = centerX + (pos.x * scene_scale_x) + offset_x
-			var centeredY = centerY + (pos.y * scene_scale_y) + offset_y
+			var centeredX = centerX - pos.x #centerX + (pos.x * scene_scale_x) + offset_x
+			var centeredY = centerY - pos.y #centerY + (pos.y * scene_scale_y) + offset_y
 			
 			print("Object UID: %s, CenteredX: %s, CenteredY: %s" % [uid, centeredX, centeredY])
 			
@@ -151,23 +148,24 @@ func compile():
 					/////////////////////
 					
 					// The obj will not be shown at the starting
-					set_transparency(0)
+					//set_transparency(0)
 					print("executing object: " + objectUID)
-					/* Compiling script */
+					/* --- Compiling script --- */
 					%s
-					/* ---------------- */
+					/* ------------------------ */
 					while_loop(() => objScene != Game.currentScene, (){
 						wait(0.1)
 					})
 					set_transparency(1)
 					execute = () {
 					if objScene == Game.currentScene{
-					/* Object script */
-					%s
+						/* Object script */
+						%s
+						/* ------------- */
 					}
 					};
 					return {execute: execute};
-		""" % [uid, position.x, position.y, rotation, group, currentCamGroup, compilingTimeScript, script]
+		""" % [uid, position.x, position.y, rotation, group, sceneID, compilingTimeScript, script]
 		objects_path.append(create_spwn("object_" + uid.replace("-", "_"), code))
 	
 	var final_script = ""
@@ -179,9 +177,10 @@ func compile():
 			%s.execute();
 		""" % [file.replace(".spwn", "")]
 	
-	main_script += "\n10000g.move(10000000,0,100000)\n"
+	main_script += "\n10001g.move(10000000,0,100000)\n"
 	
 	final_script += main_script
+	final_script = scr_head + "\n" + final_script
 	create_spwn("main", final_script)
 	
 	scenesLibCode += """}

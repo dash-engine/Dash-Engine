@@ -1,5 +1,5 @@
-// ENGINE CORE
-// DO NOT MODIFY THIS UNLESS YOU KNOW WHAT ARE YOU DOING
+//                   DASH ENGINE CORE                    \\
+//       https://github.com/dash-engine/Dash-Engine       \\
 
 extract obj_props;
 extract import "obj_props_2_2.spwn";
@@ -9,7 +9,7 @@ let camera = import "camera_triggers.spwn";
 let scenesLib = import "scenes.spwn";
 
 // Variables
-let coreVersion = "0.0.5";
+let coreVersion = "0.1.0";
 let currentScene = counter(1);
 let scenes = counter(0);
 let endTriggerGroup = 10000g;
@@ -22,10 +22,6 @@ warn = (text){
 count_scene = (){
     scenes++;
 }
-
-create_text = (text, txt_x, txt_y, group = 0g, size = 1, clr = 0c){
-    return $.add(text.to_obj().with(X, txt_x).with(Y, txt_y).with(SCALING, size).with(obj_props.GROUPS,group).with(COLOR,clr));
-};
 
 exitCamera = (camGroup){
     camera.static_camera(camGroup, duration = 0, exit_static=true, instant_exit=true);
@@ -48,16 +44,21 @@ change_scene = (sceneName) {
         let sData = i[1]
         let sID = sData["id"]
         let sGroup = sData["sceneGroup"]
-        let sCam = sData["sceneCamGroup"]
+
+        print(i)
 
         if sName == sceneName{
             currentScene = counter(sID)
-            sGroup.alpha(1)
-            //camera.static_camera(sCam, duration=0);
             found = true
+            print("-- scene found!, GROUP: --")
+            print(sGroup)
+            sGroup.alpha(1)
+            print("-- SHOW! --")
         }else{
+            print("-- hide scene: --")
+            print(sName)
+            print("----------")
             sGroup.alpha(0)
-            //exitCamera(sCam)
         }
     }
     if !found{
@@ -65,6 +66,29 @@ change_scene = (sceneName) {
     }else{
         return 1
     }
+};
+
+get_scene_group_by_id = (sceneID) {
+    let found = false
+    for i in scenesLib.scenes{
+        let sName = i[0]
+        let sData = i[1]
+        let sID = sData["id"]
+        let sGroup = sData["sceneGroup"]
+
+        if sID == sceneID{
+            return sGroup
+        }
+    }
+    if !found{
+        warn("scene not found!")
+    }else{
+        return 1
+    }
+};
+
+create_text = (text, txt_x, txt_y, group = 0g, size = 1, clr = 0c){
+    return $.add(text.to_obj().with(X, txt_x).with(Y, txt_y).with(SCALING, size).with(obj_props.GROUPS,group).with(COLOR,clr));
 };
 
 endLevel = (){
@@ -159,6 +183,7 @@ return {
 
     init: (hide_players: @bool = true, disable_death_sfx: @bool = true, hide_attempts: @bool = true) {
         plr = hide_players
+        change_scene("splash")
         $.add(obj{ // options
             OBJ_ID: 2899,
             X: -30, Y: 0,
@@ -203,7 +228,7 @@ return {
                     X: pos[0],
                     Y: pos[1],
                     HIDE_OBJECT: true,
-                    GROUPS: 999g
+                    GROUPS: 10001g
                 })
             }
         }
