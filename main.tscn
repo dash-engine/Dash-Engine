@@ -1,9 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://cctfi18ju7m2w"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_48syh"]
+[ext_resource type="Script" uid="uid://ly2iyh3gxq2f" path="res://scripts/main.gd" id="1_48syh"]
 [ext_resource type="Theme" uid="uid://dlrca21g6xugd" path="res://assets/buttonTheme.tres" id="2_b2s04"]
-[ext_resource type="Script" path="res://scripts/properties.gd" id="2_ro366"]
-[ext_resource type="Script" path="res://scripts/file_manager.gd" id="4_2mcld"]
+[ext_resource type="Script" uid="uid://cthx2cffqcwru" path="res://scripts/properties.gd" id="2_ro366"]
+[ext_resource type="Script" uid="uid://ch7sful8545xi" path="res://scripts/file_manager.gd" id="4_2mcld"]
 
 [sub_resource type="Theme" id="Theme_u2afu"]
 default_font_size = 16
@@ -153,6 +153,7 @@ offset_right = 1152.0
 offset_bottom = 151.0
 item_count = 3
 popup/item_0/text = "block"
+popup/item_0/id = 0
 popup/item_1/text = "spike"
 popup/item_1/id = 1
 popup/item_2/text = "Text"

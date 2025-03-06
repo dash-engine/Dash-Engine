@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://c34doetrbu620"]
 
-[ext_resource type="Script" path="res://scripts/script_editor.gd" id="1_7di1w"]
+[ext_resource type="Script" uid="uid://ce1hdwsog6kuf" path="res://scripts/script_editor.gd" id="1_7di1w"]
 [ext_resource type="CodeHighlighter" uid="uid://bnfspx4f8vujc" path="res://assets/scriptEditorHightlight.tres" id="1_bhn1b"]
 
 [node name="ScriptEditor" type="Control" node_paths=PackedStringArray("code")]

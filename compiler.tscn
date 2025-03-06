@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://cslxs587d02kj"]
 
-[ext_resource type="Script" path="res://scripts/compiler.gd" id="1_4vp52"]
+[ext_resource type="Script" uid="uid://webvktimi72j" path="res://scripts/compiler.gd" id="1_4vp52"]
 [ext_resource type="AudioStream" uid="uid://ddlxigoslc1j3" path="res://assets/sounds/compiling.wav" id="2_udwbm"]
 [ext_resource type="AudioStream" uid="uid://1aw4kfkicldg" path="res://assets/sounds/achievement_01.ogg" id="3_sy5m7"]
 [ext_resource type="AudioStream" uid="uid://dd4iquajvl3pk" path="res://assets/sounds/error.mp3" id="4_8tjo5"]
