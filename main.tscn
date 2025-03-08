@@ -54,7 +54,7 @@ offset_bottom = 110.0
 theme = ExtResource("2_b2s04")
 text = "Add collider"
 
-[node name="properties" type="Control" parent="." node_paths=PackedStringArray("nameTextBox", "uidTextBox", "groupTextBox", "editScriptButton", "textTextBox", "objTypeBox")]
+[node name="properties" type="Control" parent="." node_paths=PackedStringArray("nameTextBox", "uidTextBox", "groupTextBox", "ColliderGroupTextBox", "editScriptButton", "textTextBox", "objTypeBox")]
 anchors_preset = 0
 offset_top = 4.0
 offset_right = 4.0
@@ -63,6 +63,7 @@ script = ExtResource("2_ro366")
 nameTextBox = NodePath("name")
 uidTextBox = NodePath("UID")
 groupTextBox = NodePath("Group")
+ColliderGroupTextBox = NodePath("ColliderGroup")
 editScriptButton = NodePath("editRuntimeScript")
 textTextBox = NodePath("TEXT")
 objTypeBox = NodePath("objType/objType")
@@ -103,6 +104,17 @@ offset_right = 1152.0
 offset_bottom = 520.0
 theme = SubResource("Theme_u2afu")
 text = "Group: 0g"
+placeholder_text = "UID"
+editable = false
+
+[node name="ColliderGroup" type="TextEdit" parent="properties"]
+layout_mode = 0
+offset_left = 994.0
+offset_top = 272.0
+offset_right = 1152.0
+offset_bottom = 307.0
+theme = SubResource("Theme_u2afu")
+text = "Collider group: 0g"
 placeholder_text = "UID"
 editable = false
 
