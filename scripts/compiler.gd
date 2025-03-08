@@ -101,29 +101,35 @@ func compile():
 			var objectGroup = object["group"]
 			var DATA = object["DATA"]
 			
-			var moreCode = ""
-			
 			var centeredX = centerX - pos.x #centerX + (pos.x * scene_scale_x) + offset_x
 			var centeredY = centerY - pos.y #centerY + (pos.y * scene_scale_y) + offset_y
 			
-			print("Object UID: %s, CenteredX: %s, CenteredY: %s" % [uid, centeredX, centeredY])
+			objectsPos[uid] = {"x": centeredX, "y": centeredY}
+			print("DATA ",DATA)
+			
+			var moreArgs = ""
 			
 			if DATA.has("text"):
-				moreCode += """TEXT: "%s",""" % [DATA["text"]]
+				print("textType")
+				main_script += """
+				/* Object: %s */
+				%s.to_obj().with(X, %s).with(Y, %s).with(SCALING, %s).with(obj_props.GROUPS,[%s,%s,%s])
+				""" % [uid, DATA["text"], centeredX, centeredY, Global.sceneGroup, currentSceneGroup, objectGroup]
+			elif DATA.has("IMAGE"):
+				gen_image(DATA.has("IMAGE"),DATA.has("IMAGE").replace("/","").replace("\\",""),Vector2(centeredX,centeredY))
+			else:
+				main_script += """
+				/* Object: %s */
+				$.add(obj {
+					OBJ_ID: %s,
+					X: %s,
+					Y: %s,
+					ROTATION: %s,
+					%s
+					GROUPS: [%sg, %sg, %sg]
+				});
+				""" % [uid, type, centeredX, centeredY, rotation, moreArgs, Global.sceneGroup, currentSceneGroup, objectGroup]
 			
-			objectsPos[uid] = {"x": centeredX, "y": centeredY}
-			main_script += """
-			/* Object: %s */
-			$.add(obj {
-				OBJ_ID: %s,
-				X: %s,
-				Y: %s,
-				ROTATION: %s,
-				%s
-				GROUPS: [%sg, %sg, %sg]
-			});
-			""" % [uid, type, centeredX, centeredY, rotation, moreCode, Global.sceneGroup, currentSceneGroup, objectGroup]
-	
 	for object_id in Global.project["objects"]:
 		var object = Global.project["objects"][object_id]
 		var uid = object["uid"]
@@ -177,7 +183,11 @@ func compile():
 			%s.execute();
 		""" % [file.replace(".spwn", "")]
 	
-	main_script += "\n10001g.move(10000000,0,100000)\n"
+	main_script += """\n10001g.move(10000000,0,100000)\n
+	-> while_loop(() => true, () {
+		wait(2)
+	})
+	"""
 	
 	final_script += main_script
 	final_script = scr_head + "\n" + final_script
@@ -212,6 +222,36 @@ func create_spwn(fname, code):
 	file.store_string(code)
 	file.close()
 	return fileName
+
+func gen_image(imgPath, imgName, position: Vector2):
+	var script_path = "user://img.py"
+	
+	var file = FileAccess.open("res://utils/image/main.spwn",FileAccess.READ)
+	var fileCode = ""
+	while not file.eof_reached():
+		fileCode += file.get_line()
+		fileCode += "\n"
+	file.close()
+	fileCode = fileCode.replace("REPLACE_X",str(position.x))
+	fileCode = fileCode.replace("REPLACE_Y",str(position.y))
+	fileCode = fileCode.replace("REPLACE_FILE",imgName)
+	
+	if not FileAccess.file_exists(script_path):
+		var res_file = FileAccess.open("res://utils/image/img.py", FileAccess.READ)
+		var user_file = FileAccess.open(script_path, FileAccess.WRITE)
+		user_file.store_string(res_file.get_as_text())
+		res_file.close()
+		user_file.close()
+	
+	var output = []
+	var error_code = await OS.execute("python", [ProjectSettings.globalize_path(script_path), imgPath, imgName, ProjectSettings.globalize_path(dir)], output, true, true)
+
+	Global.addToOutput(ansi_parser.parse(output[0]))
+
+	if error_code != OK:
+		print("exit with error: ", error_code)
+	
+	return create_spwn(imgName, fileCode)
 
 func compileCommand():
 	var filename = "main.spwn"

@@ -3,6 +3,7 @@ extends Control
 @export var nameTextBox : TextEdit
 @export var uidTextBox : TextEdit
 @export var groupTextBox : TextEdit
+@export var ColliderGroupTextBox : TextEdit
 @export var editScriptButton : Button
 @export var textTextBox : TextEdit
 @export_group("ObjType")
@@ -16,6 +17,11 @@ func _process(delta: float) -> void:
 	if Global.current_selected_object:
 		uidTextBox.text = Global.current_selected_object.uid
 		groupTextBox.text = "Group: " + str(Global.current_selected_object.group) + "g"
+		if Global.current_selected_object.collider:
+			ColliderGroupTextBox.visible = true
+			ColliderGroupTextBox.text = "Colision: " + str(Global.current_selected_object.DATA["COLLIDER_GROUP"]) + "g"
+		else:
+			ColliderGroupTextBox.visible = false
 	if oldSelected != Global.current_selected_object or updateProperties:
 		oldSelected = Global.current_selected_object
 		if not Global.current_selected_object:

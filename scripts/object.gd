@@ -34,6 +34,7 @@ var pressedDebounce = false
 func _ready() -> void:
 	if initializate:
 		if collider:
+			DATA["COLLIDER_GROUP"] = Global.get_next_group()
 			type = 1816
 		uid = UID.generate()
 		Global.saveObject(uid, Name, Position, type, Rotation, Global.currentScene,DATA)

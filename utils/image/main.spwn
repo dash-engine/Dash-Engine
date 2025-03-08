@@ -1,0 +1,81 @@
+extract obj_props
+let content = $.readfile("REPLACE_FILE.txt")
+
+let imgX = REPLACE_X
+let imgY = REPLACE_Y
+
+// Geometry
+let width   = content.split('/')[0].split(" x ")[0] as @number
+let height  = content.split('/')[0].split(" x ")[1] as @number
+
+// RGBA  pixels
+let pix = content.split("/")
+
+let colors  = []
+
+for i in pix {
+    if !$._has_(colors, i){
+        colors.push(i)
+    }
+}
+
+let current_pixel = 0
+let cols = []
+
+let colors_length_as_col = colors.length as @color
+
+for color in 1c..colors_length_as_col{
+    cols.push([
+        colors[color as @number],
+        color as @number
+      ])
+}
+
+let color = ?c
+for w in 0..width{
+    for h in 0..height{
+
+        if current_pixel == pix.length{
+            break
+        }
+        let get_current_pix_color = pix[current_pixel]
+
+        for item in cols{
+            if item[0] == get_current_pix_color{
+
+                color=item[1]
+                color = color as @number
+                color = color as @color
+                let rgb = item[0].split(" ")
+                let alpha = rgb[3] as @number
+                alpha = alpha/255
+
+                color.set(
+                    rgb[0] as @number,
+                    rgb[1] as @number,
+                    rgb[2] as @number,
+                    opacity=alpha
+                )
+                break
+            }
+
+        }
+        let scale = 0.05
+        let blocksize = pos => pos+((scale*pos)*10)
+
+        $.add(
+            obj{
+                OBJ_ID: 211,
+                X: blocksize(w),
+                Y: blocksize(h),
+                SCALING: scale,
+                COLOR: color,
+                GROUPS: [1g]
+            }
+        )
+
+        $.print("ADDED {}th OBJECT COLOR: {}".fmt([current_pixel, color]))
+        current_pixel+=1
+    }
+
+}
